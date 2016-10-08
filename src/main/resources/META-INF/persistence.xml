@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:/jboss/datasources/brachub</jta-data-source>
+
+        <class>model.AccountType</class>
+        <class>model.Category</class>
+        <class>model.Events</class>
+        <class>model.Permissions</class>
+        <class>model.Profiles</class>
+        <class>model.Users</class>
+        <class>model.UsersEvents</class>
+
+        <properties>
+            <!-- Scan for annotated classes and Hibernate mapping XML files -->
+            <property name="hibernate.archive.autodetection" value="class, hbm"/>
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />-->
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
