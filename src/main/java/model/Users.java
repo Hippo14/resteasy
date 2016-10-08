@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @Table(name = "Users")
 public class Users implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @Column(name = "name")

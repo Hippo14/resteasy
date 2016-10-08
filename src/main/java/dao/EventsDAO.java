@@ -1,6 +1,7 @@
 package dao;
 
 import model.Events;
+import model.Events_;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -32,7 +34,18 @@ public class EventsDAO {
         return query.getResultList();
     }
 
-    public Events getByName(Integer id) {
+    public Events getById(Integer id) {
         return em.find(Events.class, id);
+    }
+
+    public Events getByName(String name) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Events> q = cb.createQuery(Events.class);
+        Root<Events> from = q.from(Events.class);
+        Predicate predicate = cb.equal(from.get(Events_.name), name);
+
+        q.select(from).where(predicate);
+
+        return em.createQuery(q).getSingleResult();
     }
 }

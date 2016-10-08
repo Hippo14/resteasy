@@ -1,20 +1,41 @@
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by MSI on 2016-09-25.
  */
 @Entity
-@Table(name = "AccountType", schema = "18076730_pracalic", catalog = "")
-public class AccountType {
-    private int id;
-
+@Table(name = "AccountType")
+public class AccountType implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    int id;
+    @ManyToOne
+    @JoinColumn(name="profileID")
+    Profiles profiles;
+    @ManyToOne
+    @JoinColumn(name="permissionID")
+    Permissions permissions;
+
+    public Profiles getProfiles() {
+        return profiles;
+    }
+
+    public void setProfiles(Profiles profiles) {
+        this.profiles = profiles;
+    }
+
+    public Permissions getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Permissions permissions) {
+        this.permissions = permissions;
+    }
+
     public int getId() {
         return id;
     }
@@ -23,20 +44,20 @@ public class AccountType {
         this.id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AccountType that = (AccountType) o;
-
-        if (id != that.id) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        AccountType that = (AccountType) o;
+//
+//        if (id != that.id) return false;
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return id;
+//    }
 }

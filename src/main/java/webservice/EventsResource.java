@@ -36,8 +36,13 @@ public class EventsResource {
 
     @Path("{id}")
     @GET
-    public Response getByName(@PathParam("id") Integer id) {
-        return Response.ok(eventsDAO.getByName(id)).build();
+    public Response getById(@PathParam("id") Integer id) {
+        return Response.ok(eventsDAO.getById(id)).build();
     }
-    
+
+    @Path("{name}")
+    @GET
+    public Response getByName(@PathParam("name") String name) {
+        return Response.ok(eventsDAO.getByName(name)).build();
+    }
 }
