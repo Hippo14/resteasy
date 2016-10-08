@@ -117,10 +117,11 @@
       <plugin>
         <groupId>org.wildfly.plugins</groupId>
         <artifactId>wildfly-maven-plugin</artifactId>
-        <version>1.0.1.Final</version>
+        <version>1.0.0.Final</version>
         <configuration>
-            <username>USERNAME</username>
-            <password>PASSWORD</password>
+            <hostname>127.0.0.1</hostname>
+            <username>admin</username>
+            <password>!QAZxsw2</password>
         </configuration>
       </plugin>
     </plugins>
