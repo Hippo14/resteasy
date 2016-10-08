@@ -115,6 +115,21 @@
     <!--</dependency>-->
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>1.0.2.Final</version>
+        <configuration>
+            <hostname>127.0.0.1</hostname>
+            <username>USERNAME</username>
+            <password>PASSWORD</password>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <!--<build>-->
     <!--<plugins>-->
       <!--<plugin>-->
