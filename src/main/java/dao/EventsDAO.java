@@ -31,4 +31,8 @@ public class EventsDAO {
 
         return query.getResultList();
     }
+
+    public Events getByName(Integer id) {
+        return em.find(Events.class, id);
+    }
 }

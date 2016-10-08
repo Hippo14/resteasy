@@ -1,27 +1,44 @@
 package model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by MSI on 2016-09-25.
  */
 @Entity
-@Table(name = "Events", schema = "18076730_pracalic", catalog = "")
-public class Events {
-    private int id;
-    private String name;
-    private String description;
-    private double longitude;
-    private double latitude;
-    private Byte deleted;
-    private Byte active;
-    private Timestamp dateCreation;
-    private Timestamp dateUpdated;
-    private Timestamp dateEnding;
-
+@Table(name = "Events")
+public class Events implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    int id;
+    @Column(name = "name")
+    String name;
+    @Column(name = "description")
+    String description;
+    @Column(name = "longitude")
+    double longitude;
+    @Column(name = "latitude")
+    double latitude;
+    @ManyToOne
+    @JoinColumn(name="userID")
+    Users users;
+    @ManyToOne
+    @JoinColumn(name="categoryID")
+    Category category;
+    @Column(name = "deleted")
+    Byte deleted;
+    @Column(name = "active")
+    Byte active;
+    @Column(name = "date_creation")
+    Timestamp dateCreation;
+    @Column(name = "date_updated")
+    Timestamp dateUpdated;
+    @Column(name = "date_ending")
+    Timestamp dateEnding;
+
     public int getId() {
         return id;
     }
@@ -30,8 +47,6 @@ public class Events {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -40,8 +55,6 @@ public class Events {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -50,8 +63,6 @@ public class Events {
         this.description = description;
     }
 
-    @Basic
-    @Column(name = "longitude")
     public double getLongitude() {
         return longitude;
     }
@@ -60,8 +71,6 @@ public class Events {
         this.longitude = longitude;
     }
 
-    @Basic
-    @Column(name = "latitude")
     public double getLatitude() {
         return latitude;
     }
@@ -70,8 +79,22 @@ public class Events {
         this.latitude = latitude;
     }
 
-    @Basic
-    @Column(name = "deleted")
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public Byte getDeleted() {
         return deleted;
     }
@@ -80,8 +103,6 @@ public class Events {
         this.deleted = deleted;
     }
 
-    @Basic
-    @Column(name = "active")
     public Byte getActive() {
         return active;
     }
@@ -90,8 +111,6 @@ public class Events {
         this.active = active;
     }
 
-    @Basic
-    @Column(name = "date_creation")
     public Timestamp getDateCreation() {
         return dateCreation;
     }
@@ -100,8 +119,6 @@ public class Events {
         this.dateCreation = dateCreation;
     }
 
-    @Basic
-    @Column(name = "date_updated")
     public Timestamp getDateUpdated() {
         return dateUpdated;
     }
@@ -110,8 +127,6 @@ public class Events {
         this.dateUpdated = dateUpdated;
     }
 
-    @Basic
-    @Column(name = "date_ending")
     public Timestamp getDateEnding() {
         return dateEnding;
     }
@@ -120,43 +135,43 @@ public class Events {
         this.dateEnding = dateEnding;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Events that = (Events) o;
-
-        if (id != that.id) return false;
-        if (Double.compare(that.longitude, longitude) != 0) return false;
-        if (Double.compare(that.latitude, latitude) != 0) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (deleted != null ? !deleted.equals(that.deleted) : that.deleted != null) return false;
-        if (active != null ? !active.equals(that.active) : that.active != null) return false;
-        if (dateCreation != null ? !dateCreation.equals(that.dateCreation) : that.dateCreation != null) return false;
-        if (dateUpdated != null ? !dateUpdated.equals(that.dateUpdated) : that.dateUpdated != null) return false;
-        if (dateEnding != null ? !dateEnding.equals(that.dateEnding) : that.dateEnding != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        temp = Double.doubleToLongBits(longitude);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(latitude);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (deleted != null ? deleted.hashCode() : 0);
-        result = 31 * result + (active != null ? active.hashCode() : 0);
-        result = 31 * result + (dateCreation != null ? dateCreation.hashCode() : 0);
-        result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
-        result = 31 * result + (dateEnding != null ? dateEnding.hashCode() : 0);
-        return result;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        Events that = (Events) o;
+//
+//        if (id != that.id) return false;
+//        if (Double.compare(that.longitude, longitude) != 0) return false;
+//        if (Double.compare(that.latitude, latitude) != 0) return false;
+//        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+//        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+//        if (deleted != null ? !deleted.equals(that.deleted) : that.deleted != null) return false;
+//        if (active != null ? !active.equals(that.active) : that.active != null) return false;
+//        if (dateCreation != null ? !dateCreation.equals(that.dateCreation) : that.dateCreation != null) return false;
+//        if (dateUpdated != null ? !dateUpdated.equals(that.dateUpdated) : that.dateUpdated != null) return false;
+//        if (dateEnding != null ? !dateEnding.equals(that.dateEnding) : that.dateEnding != null) return false;
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result;
+//        long temp;
+//        result = id;
+//        result = 31 * result + (name != null ? name.hashCode() : 0);
+//        result = 31 * result + (description != null ? description.hashCode() : 0);
+//        temp = Double.doubleToLongBits(longitude);
+//        result = 31 * result + (int) (temp ^ (temp >>> 32));
+//        temp = Double.doubleToLongBits(latitude);
+//        result = 31 * result + (int) (temp ^ (temp >>> 32));
+//        result = 31 * result + (deleted != null ? deleted.hashCode() : 0);
+//        result = 31 * result + (active != null ? active.hashCode() : 0);
+//        result = 31 * result + (dateCreation != null ? dateCreation.hashCode() : 0);
+//        result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
+//        result = 31 * result + (dateEnding != null ? dateEnding.hashCode() : 0);
+//        return result;
+//    }
 }

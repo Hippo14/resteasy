@@ -1,26 +1,39 @@
 package model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by MSI on 2016-09-25.
  */
 @Entity
-@Table(name = "Users", schema = "18076730_pracalic", catalog = "")
-public class Users {
-    private int id;
-    private String name;
-    private String password;
-    private String email;
-    private Byte deleted;
-    private Timestamp dateCreation;
-    private Timestamp dateUpdated;
-    private Timestamp dateDeleted;
-    private String userImage;
-
+@Table(name = "Users")
+public class Users implements Serializable {
     @Id
     @Column(name = "id")
+    private int id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "email")
+    private String email;
+    @ManyToOne
+    @JoinColumn(name = "profileID")
+    Profiles profiles;
+    @Column(name = "deleted")
+    private Byte deleted;
+    @Column(name = "date_creation")
+    private Timestamp dateCreation;
+    @Column(name = "date_updated")
+    private Timestamp dateUpdated;
+    @Column(name = "date_deleted")
+    private Timestamp dateDeleted;
+    @Column(name = "userImage")
+    private String userImage;
+
+
     public int getId() {
         return id;
     }
@@ -29,8 +42,6 @@ public class Users {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -39,8 +50,6 @@ public class Users {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -49,8 +58,6 @@ public class Users {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "email")
     public String getEmail() {
         return email;
     }
@@ -59,8 +66,6 @@ public class Users {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "deleted")
     public Byte getDeleted() {
         return deleted;
     }
@@ -69,8 +74,6 @@ public class Users {
         this.deleted = deleted;
     }
 
-    @Basic
-    @Column(name = "date_creation")
     public Timestamp getDateCreation() {
         return dateCreation;
     }
@@ -79,8 +82,6 @@ public class Users {
         this.dateCreation = dateCreation;
     }
 
-    @Basic
-    @Column(name = "date_updated")
     public Timestamp getDateUpdated() {
         return dateUpdated;
     }
@@ -89,8 +90,6 @@ public class Users {
         this.dateUpdated = dateUpdated;
     }
 
-    @Basic
-    @Column(name = "date_deleted")
     public Timestamp getDateDeleted() {
         return dateDeleted;
     }
@@ -99,8 +98,6 @@ public class Users {
         this.dateDeleted = dateDeleted;
     }
 
-    @Basic
-    @Column(name = "userImage")
     public String getUserImage() {
         return userImage;
     }
@@ -109,37 +106,45 @@ public class Users {
         this.userImage = userImage;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Users that = (Users) o;
-
-        if (id != that.id) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (deleted != null ? !deleted.equals(that.deleted) : that.deleted != null) return false;
-        if (dateCreation != null ? !dateCreation.equals(that.dateCreation) : that.dateCreation != null) return false;
-        if (dateUpdated != null ? !dateUpdated.equals(that.dateUpdated) : that.dateUpdated != null) return false;
-        if (dateDeleted != null ? !dateDeleted.equals(that.dateDeleted) : that.dateDeleted != null) return false;
-        if (userImage != null ? !userImage.equals(that.userImage) : that.userImage != null) return false;
-
-        return true;
+    public Profiles getProfiles() {
+        return profiles;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (deleted != null ? deleted.hashCode() : 0);
-        result = 31 * result + (dateCreation != null ? dateCreation.hashCode() : 0);
-        result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
-        result = 31 * result + (dateDeleted != null ? dateDeleted.hashCode() : 0);
-        result = 31 * result + (userImage != null ? userImage.hashCode() : 0);
-        return result;
+    public void setProfiles(Profiles profiles) {
+        this.profiles = profiles;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        Users that = (Users) o;
+//
+//        if (id != that.id) return false;
+//        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+//        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+//        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+//        if (deleted != null ? !deleted.equals(that.deleted) : that.deleted != null) return false;
+//        if (dateCreation != null ? !dateCreation.equals(that.dateCreation) : that.dateCreation != null) return false;
+//        if (dateUpdated != null ? !dateUpdated.equals(that.dateUpdated) : that.dateUpdated != null) return false;
+//        if (dateDeleted != null ? !dateDeleted.equals(that.dateDeleted) : that.dateDeleted != null) return false;
+//        if (userImage != null ? !userImage.equals(that.userImage) : that.userImage != null) return false;
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = id;
+//        result = 31 * result + (name != null ? name.hashCode() : 0);
+//        result = 31 * result + (password != null ? password.hashCode() : 0);
+//        result = 31 * result + (email != null ? email.hashCode() : 0);
+//        result = 31 * result + (deleted != null ? deleted.hashCode() : 0);
+//        result = 31 * result + (dateCreation != null ? dateCreation.hashCode() : 0);
+//        result = 31 * result + (dateUpdated != null ? dateUpdated.hashCode() : 0);
+//        result = 31 * result + (dateDeleted != null ? dateDeleted.hashCode() : 0);
+//        result = 31 * result + (userImage != null ? userImage.hashCode() : 0);
+//        return result;
+//    }
 }

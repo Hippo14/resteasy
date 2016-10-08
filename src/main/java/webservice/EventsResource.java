@@ -6,6 +6,7 @@ import model.Events;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -31,6 +32,12 @@ public class EventsResource {
 
         GenericEntity<List<Events>> ge = new GenericEntity<List<Events>>(events){};
         return Response.ok(ge).build();
+    }
+
+    @Path("{id}")
+    @GET
+    public Response getByName(@PathParam("id") Integer id) {
+        return Response.ok(eventsDAO.getByName(id)).build();
     }
     
 }
