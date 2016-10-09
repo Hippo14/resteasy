@@ -19,6 +19,7 @@
     <servlet-name>Resteasy</servlet-name>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
+
    <!--This need same with resteasy servlet url-pattern -->
   <context-param>
     <param-name>resteasy.servlet.mapping.prefix</param-name>
