@@ -13,26 +13,26 @@ public class Users implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    int id;
     @Column(name = "name")
-    private String name;
+    String name;
     @Column(name = "password")
-    private String password;
+    String password;
     @Column(name = "email")
-    private String email;
+    String email;
     @ManyToOne
     @JoinColumn(name = "profileID")
     Profiles profiles;
     @Column(name = "deleted")
-    private Byte deleted;
+    Byte deleted;
     @Column(name = "date_creation")
-    private Timestamp dateCreation;
-    @Column(name = "date_updated")
-    private Timestamp dateUpdated;
+    Timestamp dateCreation;
+    @Column(name = "date_updated", nullable = false)
+    Timestamp dateUpdated;
     @Column(name = "date_deleted")
-    private Timestamp dateDeleted;
+    Timestamp dateDeleted;
     @Column(name = "userImage")
-    private String userImage;
+    String userImage;
 
 
     public int getId() {

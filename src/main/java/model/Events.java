@@ -34,7 +34,7 @@ public class Events implements Serializable {
     Byte active;
     @Column(name = "date_creation")
     Timestamp dateCreation;
-    @Column(name = "date_updated")
+    @Column(name = "date_updated", nullable = false)
     Timestamp dateUpdated;
     @Column(name = "date_ending")
     Timestamp dateEnding;

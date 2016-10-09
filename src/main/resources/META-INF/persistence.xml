@@ -3,7 +3,8 @@
 
     <persistence-unit name="NewPersistenceUnit">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <jta-data-source>java:/jboss/datasources/brachub</jta-data-source>
+        <!--<jta-data-source>java:/jboss/datasources/brachub</jta-data-source>-->
+        <jta-data-source>java:/MSSQLDS</jta-data-source>
 
         <class>model.AccountType</class>
         <class>model.Category</class>
