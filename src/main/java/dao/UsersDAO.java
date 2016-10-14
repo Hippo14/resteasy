@@ -1,5 +1,6 @@
 package dao;
 
+import config.ErrorConfig;
 import model.Users;
 import model.Users_;
 
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.WebApplicationException;
 
 /**
  * Created by MSI on 2016-10-09.
@@ -45,7 +47,6 @@ public class UsersDAO {
         if (password.equals(user.getPassword()))
             return user;
         else
-            return null;
-
+            throw new WebApplicationException(ErrorConfig.BAD_PASSWORD);
     }
 }

@@ -15,6 +15,11 @@
     <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
   </servlet>
 
+  <context-param>
+    <param-name>resteasy.providers</param-name>
+    <param-value>DefaultExceptionHandler</param-value>
+  </context-param>
+
   <servlet-mapping>
     <servlet-name>Resteasy</servlet-name>
     <url-pattern>/rest/*</url-pattern>

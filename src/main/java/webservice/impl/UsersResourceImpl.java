@@ -1,5 +1,6 @@
 package webservice.impl;
 
+import config.ErrorConfig;
 import dao.UsersDAO;
 import model.Users;
 import org.apache.log4j.Logger;
@@ -8,7 +9,6 @@ import webservice.UsersResource;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.NoSuchAlgorithmException;
@@ -40,11 +40,12 @@ public class UsersResourceImpl implements UsersResource {
 
         Users user = usersDAO.getByEmail(email, password);
 
-        if (user != null)
+
+//        if (user != null)
             return Response.ok(user).build();
-        else
+//        else
 //            return Response.serverError().entity("Bad password!").build();
-            return Response.status(401).entity("Bad password!").type(MediaType.APPLICATION_JSON_TYPE).build();
+//            return Response.status(401).entity(ErrorConfig.BAD_PASSWORD).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
 }
