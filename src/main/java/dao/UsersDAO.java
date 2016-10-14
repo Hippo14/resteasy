@@ -42,7 +42,7 @@ public class UsersDAO {
 
         Users user = em.createQuery(q).getSingleResult();
 
-        if (user.getPassword() == password)
+        if (password.equals(user.getPassword()))
             return user;
         else
             return null;

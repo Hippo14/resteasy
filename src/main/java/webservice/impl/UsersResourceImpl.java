@@ -8,6 +8,8 @@ import webservice.UsersResource;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.NoSuchAlgorithmException;
 
@@ -41,7 +43,8 @@ public class UsersResourceImpl implements UsersResource {
         if (user != null)
             return Response.ok(user).build();
         else
-            return Response.serverError().build();
+//            return Response.serverError().entity("Bad password!").build();
+            return Response.status(401).entity("Bad password!").type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
 }
