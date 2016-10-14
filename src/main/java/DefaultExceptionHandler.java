@@ -12,11 +12,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception e) {
-        StringBuilder response = new StringBuilder("{");
-        response.append("\"status\":\"ERROR\",");
-        response.append("\"message\":\"" + e.getMessage() + "\"");
-        response.append("}");
+//        StringBuilder response = new StringBuilder("{");
+//        response.append("\"status\":\"ERROR\",");
+//        response.append("\"message\":\"" + e.getMessage() + "\"");
+//        response.append("}");
 
+        String response = e.getMessage();
 
         return Response.serverError().entity(response.toString()).type(MediaType.APPLICATION_JSON).build();
     }
