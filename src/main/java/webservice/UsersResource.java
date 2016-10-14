@@ -18,4 +18,7 @@ public interface UsersResource {
     @Path("/get/{name}")
     Response getByName(@PathParam("name") String name);
 
+    @GET
+    @Path("/get/{email}/{password}")
+    Response getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
 }

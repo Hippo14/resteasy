@@ -32,4 +32,20 @@ public class UsersDAO {
         return em.createQuery(q).getSingleResult();
     }
 
+    public Users getByEmail(String email, String password) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Users> q = cb.createQuery(Users.class);
+        Root<Users> from = q.from(Users.class);
+        Predicate predicate = cb.equal(from.get(Users_.email), email);
+
+        q.select(from).where(predicate);
+
+        Users user = em.createQuery(q).getSingleResult();
+
+        if (user.getPassword() == password)
+            return user;
+        else
+            return null;
+
+    }
 }
