@@ -50,6 +50,11 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.6.3</version>
     </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jackson-provider</artifactId>
+      <version>3.0.4.Final</version>
+    </dependency>
 
     <!-- Tests -->
     <dependency>
@@ -104,6 +109,7 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
       <version>4.2.18.Final</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -115,11 +121,20 @@
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-jpamodelgen</artifactId>
         <version>1.2.0.Final</version>
+        <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>6.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Dom4J -->
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

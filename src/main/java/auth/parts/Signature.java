@@ -26,7 +26,7 @@ public class Signature implements IParts {
     }
 
     @Override
-    public String toBase64() {
+    public String toBase64() throws UnsupportedEncodingException {
         String encode = null;
 
         try {
@@ -42,10 +42,7 @@ public class Signature implements IParts {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
         return encode;
     }
-
 }

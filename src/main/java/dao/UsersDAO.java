@@ -1,8 +1,10 @@
 package dao;
 
 import auth.Token;
+import auth.parts.Header;
+import auth.parts.Payload;
 import config.ErrorConfig;
-import model.Key;
+import model.UsersKeys;
 import model.Users;
 import model.Users_;
 import org.hibernate.HibernateException;
@@ -16,12 +18,16 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by MSI on 2016-10-09.
@@ -31,6 +37,8 @@ public class UsersDAO {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;
+
+    private static final int TOKEN_TIME_IN_MIN = 60;
 
     public Users getByName(String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -60,23 +68,18 @@ public class UsersDAO {
     }
 
     public String createNewUser(Users newUser) {
-        try {
-            // Add user to database
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            Transaction tx = session.beginTransaction();
+        // Check if user exists
+        if (userExists(newUser))
+            throw new HibernateException("User exists!");
 
-            session.save(newUser);
-            tx.commit();
-            session.close();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-        }
+        // Add user to database
+        em.persist(newUser);
 
         // Generate key
         byte[] key = null;
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-            keyGen.init(256); // for example
+            keyGen.init(1024); // for example
             SecretKey secretKey = keyGen.generateKey();
             key = secretKey.getEncoded();
         } catch (NoSuchAlgorithmException e) {
@@ -85,26 +88,50 @@ public class UsersDAO {
 
         // Get token for user
         String token = null;
+        Date date = new Date(System.currentTimeMillis() + TOKEN_TIME_IN_MIN * 60 * 1000);
+        Timestamp dateExpire = new Timestamp(date.getTime());
+
         try {
-            token = Token.getTokenToJson(newUser, key);
-        } catch (NoSuchAlgorithmException e) {
+            Token tokenO = new Token
+                    .TokenBuilder()
+                    .header(new Header())
+                    .payload(new Payload(
+                            dateExpire,
+                            newUser.getName(),
+                            ("Admin".equals(newUser.getProfiles().getName()) ? "Yes" : "No")
+                    ))
+                    .signature(key)
+                    .build();
+            token = tokenO.toString();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        //TODO ADD TOKEN TO DATABASE!!!!!!
         // Add key to database
-        try {
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            Transaction tx = session.beginTransaction();
-
-            session.save(new Key(newUser, key));
-            tx.commit();
-            session.close();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-        }
+        em.persist(new UsersKeys(newUser, dateExpire, key));
 
         return token;
+
+    }
+
+    private boolean userExists(Users newUser) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Users> q = cb.createQuery(Users.class);
+        Root<Users> from = q.from(Users.class);
+        Predicate predicate = cb.equal(from.get(Users_.email), newUser.getEmail());
+        q.select(from).where(predicate);
+        TypedQuery<Users> tq = em.createQuery(q);
+        tq.setMaxResults(1);
+
+        Users user = null;
+
+        try {
+            user = tq.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return (user != null);
 
     }
 }

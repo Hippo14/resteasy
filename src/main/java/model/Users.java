@@ -34,6 +34,8 @@ public class Users implements Serializable {
     @Column(name = "userImage")
     String userImage;
 
+    public Users() { }
+
 
     public int getId() {
         return id;

@@ -1,6 +1,9 @@
 package auth.parts;
 
 import utils.ObjectToJsonUtils;
+import org.apache.commons.codec.binary.Base64;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by KMacioszek on 2016-10-17.
@@ -24,7 +27,7 @@ public class Header implements IParts {
     }
 
     @Override
-    public String toBase64() {
-        return ObjectToJsonUtils.convertToJson(this);
+    public String toBase64() throws UnsupportedEncodingException {
+        return new String(Base64.encodeBase64(ObjectToJsonUtils.convertToJson(this).getBytes("UTF-8")));
     }
 }

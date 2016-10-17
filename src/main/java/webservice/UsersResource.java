@@ -22,5 +22,7 @@ public interface UsersResource {
 
     @POST
     @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewUser(Users newUser);
 }

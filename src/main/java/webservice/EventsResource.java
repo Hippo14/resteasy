@@ -12,7 +12,8 @@ import javax.ws.rs.core.Response;
  */
 @Produces(MediaType.APPLICATION_JSON)
 public interface EventsResource {
-
+    @GET
+    @Path("")
     Response getAll();
 
     @GET

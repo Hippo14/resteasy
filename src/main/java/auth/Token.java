@@ -5,43 +5,86 @@ import auth.parts.Payload;
 import auth.parts.Signature;
 import model.Users;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.io.UnsupportedEncodingException;
 
 /**
- * Created by KMacioszek on 2016-10-17.
+ * Created by MSI on 2016-10-17.
  */
-public class Token implements IToken{
+public class Token {
 
-    private static final int TOKEN_TIME_IN_MIN = 60;
+    final Header header;
+    final Payload payload;
+    final Signature signature;
 
-    public static String getTokenToJson(Users users, byte[] key) throws NoSuchAlgorithmException {
+    final Users user;
 
-        Date date = new Date(System.currentTimeMillis() + TOKEN_TIME_IN_MIN * 60 * 1000);
-
-        // Create header
-        Header header = new Header();
-
-        // Create payload
-        Payload payload = new Payload(
-                new Timestamp(date.getTime()),
-                users.getName(),
-                ("Admin".equals(users.getProfiles().getName()) ? "Yes" : "No")
-        );
-
-        // Create signature
-        Signature signature = new Signature(
-                header.toBase64(),
-                payload.toBase64(),
-                key
-        );
-
-        return
-                header.toBase64() + "." +
-                payload.toBase64() + "." +
-                signature.toBase64();
+    public Token(Header header, Payload payload, Signature signature, Users user) {
+        this.header = header;
+        this.payload = payload;
+        this.signature = signature;
+        this.user = user;
     }
 
+    public Header getHeader() {
+        return header;
+    }
+
+    public Payload getPayload() {
+        return payload;
+    }
+
+    public Signature getSignature() {
+        return signature;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return header.toBase64() + "." + payload.toBase64() + "." + signature.toBase64();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static class TokenBuilder {
+        private Header nestedHeader;
+        private Payload nestedPayload;
+        private Signature nestedSignature;
+        private Users nestedUser;
+
+        public TokenBuilder() {
+        }
+
+        public TokenBuilder header(final Header header) {
+            this.nestedHeader = header;
+            return this;
+        }
+
+        public TokenBuilder payload(final Payload payload) {
+            this.nestedPayload = payload;
+            return this;
+        }
+
+        public TokenBuilder signature(final byte[] key) throws UnsupportedEncodingException {
+            String sHeader = nestedHeader.toBase64();
+            String sPayload = nestedPayload.toBase64();
+            this.nestedSignature = new Signature(sHeader, sPayload, key);
+            return this;
+        }
+
+        public TokenBuilder user(final Users user) {
+            this.nestedUser = user;
+            return this;
+        }
+
+        public Token build() {
+            return new Token(nestedHeader, nestedPayload, nestedSignature, nestedUser);
+        }
+    }
 
 }
