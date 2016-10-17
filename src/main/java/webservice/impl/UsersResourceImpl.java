@@ -30,7 +30,7 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    public Response getByEmailAndPassword(String email, String password) {
+    public Users getByEmailAndPassword(String email, String password) {
         try {
             password = MD5Utils.StringToMD5(password);
         } catch (NoSuchAlgorithmException e) {
@@ -38,14 +38,14 @@ public class UsersResourceImpl implements UsersResource {
             e.printStackTrace();
         }
 
-        Users user = usersDAO.getByEmail(email, password);
+//        Users user = usersDAO.getByEmail(email, password);
+//        return Response.ok(user).build();
+        return usersDAO.getByEmail(email, password);
+    }
 
-
-//        if (user != null)
-            return Response.ok(user).build();
-//        else
-//            return Response.serverError().entity("Bad password!").build();
-//            return Response.status(401).entity(ErrorConfig.BAD_PASSWORD).type(MediaType.APPLICATION_JSON_TYPE).build();
+    @Override
+    public Users registerNewUser(Users newUser) {
+        usersDAO.createNewUser(newUser);
     }
 
 }

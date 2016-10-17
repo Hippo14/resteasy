@@ -1,15 +1,15 @@
 package webservice;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import model.Users;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 /**
  * Created by MSI on 2016-10-09.
  */
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public interface UsersResource {
 
     @GET
@@ -18,5 +18,9 @@ public interface UsersResource {
 
     @GET
     @Path("/get/{email}/{password}")
-    Response getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
+    Users getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
+
+    @POST
+    @Path("/")
+    Users registerNewUser(Users newUser);
 }

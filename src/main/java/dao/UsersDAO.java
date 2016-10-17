@@ -1,8 +1,13 @@
 package dao;
 
+import auth.Token;
 import config.ErrorConfig;
 import model.Users;
 import model.Users_;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import utils.HibernateUtil;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -13,6 +18,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by MSI on 2016-10-09.
@@ -48,5 +54,30 @@ public class UsersDAO {
             return user;
         else
             throw new WebApplicationException(ErrorConfig.BAD_PASSWORD);
+    }
+
+    public String createNewUser(Users newUser) {
+        try {
+            // Add user to database
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+
+            session.save(newUser);
+            tx.commit();
+            session.close();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
+        //TODO ADD TOKEN TO DATABASE!!!!!!
+        // Get token for user
+        String token = null;
+        try {
+            token = Token.getTokenToJson(newUser);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return token;
+
     }
 }
