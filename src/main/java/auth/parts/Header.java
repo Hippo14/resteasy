@@ -5,7 +5,7 @@ import utils.ObjectToJsonUtils;
 /**
  * Created by KMacioszek on 2016-10-17.
  */
-public class Header implements IToken {
+public class Header implements IParts {
 
     private final String alg;
     private final String typ;

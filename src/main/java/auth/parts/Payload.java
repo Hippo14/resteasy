@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 /**
  * Created by KMacioszek on 2016-10-17.
  */
-public class Payload implements IToken {
+public class Payload implements IParts {
 
     private final String iss;
     private final Timestamp exp;

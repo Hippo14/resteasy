@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by KMacioszek on 2016-10-17.
  */
-public class Signature implements IToken {
+public class Signature implements IParts {
 
     private static final String ALGORITHM_SIGNATURE = "HmacSHA256";
     private final String header;

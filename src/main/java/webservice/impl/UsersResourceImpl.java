@@ -38,6 +38,8 @@ public class UsersResourceImpl implements UsersResource {
             e.printStackTrace();
         }
 
+        //TODO return token, not user!!!
+
 //        Users user = usersDAO.getByEmail(email, password);
 //        return Response.ok(user).build();
         return usersDAO.getByEmail(email, password);

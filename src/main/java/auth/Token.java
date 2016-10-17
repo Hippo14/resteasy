@@ -4,11 +4,7 @@ import auth.parts.Header;
 import auth.parts.Payload;
 import auth.parts.Signature;
 import model.Users;
-import utils.ObjectToJsonUtils;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -16,7 +12,7 @@ import java.util.Date;
 /**
  * Created by KMacioszek on 2016-10-17.
  */
-public class Token {
+public class Token implements IToken{
 
     private static final int TOKEN_TIME_IN_MIN = 60;
 
@@ -24,13 +20,17 @@ public class Token {
 
         Date date = new Date(System.currentTimeMillis() + TOKEN_TIME_IN_MIN * 60 * 1000);
 
-
+        // Create header
         Header header = new Header();
+
+        // Create payload
         Payload payload = new Payload(
                 new Timestamp(date.getTime()),
                 users.getName(),
                 ("Admin".equals(users.getProfiles().getName()) ? "Yes" : "No")
         );
+
+        // Create signature
         Signature signature = new Signature(
                 header.toBase64(),
                 payload.toBase64(),
