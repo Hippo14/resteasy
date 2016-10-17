@@ -20,14 +20,9 @@ public class Token {
 
     private static final int TOKEN_TIME_IN_MIN = 60;
 
-    public static String getTokenToJson(Users users) throws NoSuchAlgorithmException {
+    public static String getTokenToJson(Users users, byte[] key) throws NoSuchAlgorithmException {
 
         Date date = new Date(System.currentTimeMillis() + TOKEN_TIME_IN_MIN * 60 * 1000);
-
-        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-        keyGen.init(256); // for example
-        SecretKey secretKey = keyGen.generateKey();
-        byte[] key = secretKey.getEncoded();
 
 
         Header header = new Header();

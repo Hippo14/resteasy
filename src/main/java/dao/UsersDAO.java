@@ -2,6 +2,7 @@ package dao;
 
 import auth.Token;
 import config.ErrorConfig;
+import model.Key;
 import model.Users;
 import model.Users_;
 import org.hibernate.HibernateException;
@@ -9,6 +10,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import utils.HibernateUtil;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -68,12 +71,36 @@ public class UsersDAO {
         } catch (HibernateException e) {
             e.printStackTrace();
         }
-        //TODO ADD TOKEN TO DATABASE!!!!!!
+
+        // Generate key
+        byte[] key = null;
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(256); // for example
+            SecretKey secretKey = keyGen.generateKey();
+            key = secretKey.getEncoded();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
         // Get token for user
         String token = null;
         try {
-            token = Token.getTokenToJson(newUser);
+            token = Token.getTokenToJson(newUser, key);
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        //TODO ADD TOKEN TO DATABASE!!!!!!
+        // Add key to database
+        try {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+
+            session.save(new Key(newUser, key));
+            tx.commit();
+            session.close();
+        } catch (HibernateException e) {
             e.printStackTrace();
         }
 
