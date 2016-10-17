@@ -44,8 +44,10 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    public Users registerNewUser(Users newUser) {
-        usersDAO.createNewUser(newUser);
+    public Response registerNewUser(Users newUser) {
+        String token = usersDAO.createNewUser(newUser);
+
+        return Response.ok(token).build();
     }
 
 }

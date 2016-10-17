@@ -22,5 +22,5 @@ public interface UsersResource {
 
     @POST
     @Path("/")
-    Users registerNewUser(Users newUser);
+    Response registerNewUser(Users newUser);
 }
