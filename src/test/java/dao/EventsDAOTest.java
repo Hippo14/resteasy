@@ -1,7 +1,6 @@
 package dao;
 
 import org.junit.Test;
-import static org.junit.*;
 
 /**
  * Created by KMacioszek on 2016-10-13.
