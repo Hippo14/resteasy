@@ -1,48 +1,25 @@
 package webservice;
 
-import dao.EventsDAO;
-import model.Events;
-
-import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 /**
- * Created by MSI on 2016-09-25.
+ * Created by KMacioszek on 2016-10-12.
  */
-@Path("events")
 @Produces(MediaType.APPLICATION_JSON)
-public class EventsResource {
-    
-    @EJB
-    EventsDAO eventsDAO;
-    
-    @Path("")
+public interface EventsResource {
+
+    Response getAll();
+
     @GET
-    public Response getAll() {
-        List<Events> events = eventsDAO.getAll();
-        if (events == null)
-            return Response.serverError().build();
-
-        GenericEntity<List<Events>> ge = new GenericEntity<List<Events>>(events){};
-        return Response.ok(ge).build();
-    }
-
     @Path("{id}")
-    @GET
-    public Response getById(@PathParam("id") Integer id) {
-        return Response.ok(eventsDAO.getById(id)).build();
-    }
+    Response getById(@PathParam("id") Integer id);
 
-    @Path("{name}")
     @GET
-    public Response getByName(@PathParam("name") String name) {
-        return Response.ok(eventsDAO.getByName(name)).build();
-    }
+    @Path("{name}")
+    Response getByName(@PathParam("name") String name);
 }
