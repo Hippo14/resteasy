@@ -28,7 +28,7 @@ public interface UsersResource {
     String getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
-    @Path("/")
+    @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     String registerNewUser(Users newUser);

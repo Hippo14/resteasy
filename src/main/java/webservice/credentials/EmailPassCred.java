@@ -10,9 +10,7 @@ public class EmailPassCred implements Serializable {
     String email;
     String password;
 
-    public EmailPassCred() {
-
-    }
+    public EmailPassCred() { }
 
     public String getEmail() {
         return email;
