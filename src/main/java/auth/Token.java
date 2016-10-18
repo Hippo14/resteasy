@@ -4,8 +4,14 @@ import auth.parts.Header;
 import auth.parts.Payload;
 import auth.parts.Signature;
 import model.Users;
+import model.UsersKeys;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by MSI on 2016-10-17.

@@ -30,7 +30,7 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    public Users getByEmailAndPassword(String email, String password) {
+    public String getByEmailAndPassword(String email, String password) {
         try {
             password = MD5Utils.StringToMD5(password);
         } catch (NoSuchAlgorithmException e) {
@@ -38,18 +38,12 @@ public class UsersResourceImpl implements UsersResource {
             e.printStackTrace();
         }
 
-        //TODO return token, not user!!!
-
-//        Users user = usersDAO.getByEmail(email, password);
-//        return Response.ok(user).build();
         return usersDAO.getByEmail(email, password);
     }
 
     @Override
-    public Response registerNewUser(Users newUser) {
-        String token = usersDAO.createNewUser(newUser);
-
-        return Response.ok(token).build();
+    public String registerNewUser(Users newUser) {
+        return usersDAO.createNewUser(newUser);
     }
 
 }

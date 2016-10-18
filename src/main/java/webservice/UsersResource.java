@@ -18,11 +18,11 @@ public interface UsersResource {
 
     @GET
     @Path("/get/{email}/{password}")
-    Users getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
+    String getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
 
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response registerNewUser(Users newUser);
+    String registerNewUser(Users newUser);
 }

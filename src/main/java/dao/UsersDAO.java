@@ -14,6 +14,7 @@ import utils.HibernateUtil;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,7 +39,8 @@ public class UsersDAO {
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;
 
-    private static final int TOKEN_TIME_IN_MIN = 60;
+    @EJB
+    TokensDAO tokensDAO;
 
     public Users getByName(String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -51,7 +53,17 @@ public class UsersDAO {
         return em.createQuery(q).getSingleResult();
     }
 
-    public Users getByEmail(String email, String password) {
+    public String getByEmail(String email, String password) {
+        // Get user by credentials
+        Users user = getByCredentials(email, password);
+
+        if (password.equals(user.getPassword()))
+            return tokensDAO.generateToken(user);
+        else
+            throw new WebApplicationException(ErrorConfig.BAD_PASSWORD);
+    }
+
+    private Users getByCredentials(String email, String password) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Users> q = cb.createQuery(Users.class);
         Root<Users> from = q.from(Users.class);
@@ -59,12 +71,7 @@ public class UsersDAO {
 
         q.select(from).where(predicate);
 
-        Users user = em.createQuery(q).getSingleResult();
-
-        if (password.equals(user.getPassword()))
-            return user;
-        else
-            throw new WebApplicationException(ErrorConfig.BAD_PASSWORD);
+        return em.createQuery(q).getSingleResult();
     }
 
     public String createNewUser(Users newUser) {
@@ -75,43 +82,8 @@ public class UsersDAO {
         // Add user to database
         em.persist(newUser);
 
-        // Generate key
-        byte[] key = null;
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-            keyGen.init(1024); // for example
-            SecretKey secretKey = keyGen.generateKey();
-            key = secretKey.getEncoded();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        // Get token for user
-        String token = null;
-        Date date = new Date(System.currentTimeMillis() + TOKEN_TIME_IN_MIN * 60 * 1000);
-        Timestamp dateExpire = new Timestamp(date.getTime());
-
-        try {
-            Token tokenO = new Token
-                    .TokenBuilder()
-                    .header(new Header())
-                    .payload(new Payload(
-                            dateExpire,
-                            newUser.getName(),
-                            ("Admin".equals(newUser.getProfiles().getName()) ? "Yes" : "No")
-                    ))
-                    .signature(key)
-                    .build();
-            token = tokenO.toString();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        // Add key to database
-        em.persist(new UsersKeys(newUser, dateExpire, key));
-
-        return token;
-
+        // Generate token
+        return tokensDAO.generateToken(newUser);
     }
 
     private boolean userExists(Users newUser) {
