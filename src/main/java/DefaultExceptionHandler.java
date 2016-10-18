@@ -17,7 +17,7 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
 //        response.append("\"message\":\"" + e.getMessage() + "\"");
 //        response.append("}");
 
-        String response = e.getMessage();
+        String response = e.getStackTrace().toString();
 
         return Response.serverError().entity(response.toString()).type(MediaType.APPLICATION_JSON).build();
     }
