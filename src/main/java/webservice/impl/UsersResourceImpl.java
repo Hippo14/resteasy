@@ -3,6 +3,7 @@ package webservice.impl;
 import config.ErrorConfig;
 import dao.UsersDAO;
 import model.Users;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import secure.RSA;
 import utils.MD5Utils;
@@ -39,13 +40,13 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    //TODO Password must be encrypted with public RSA!!!!
+    //TODO Password must be encrypted with public RSA and send in Base64!!!!
     public String getByEmailAndPassword(String email, String password) {
         String decryptedPassword = null;
         // Decrypt password
         try {
             RSA rsa = new RSA();
-            decryptedPassword = rsa.decrypt(password.getBytes("UTF-8"));
+            decryptedPassword = rsa.decrypt(Base64.encodeBase64(password.getBytes("UTF-8")));
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
