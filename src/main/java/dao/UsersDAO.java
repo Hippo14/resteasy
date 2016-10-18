@@ -7,10 +7,12 @@ import config.ErrorConfig;
 import model.UsersKeys;
 import model.Users;
 import model.Users_;
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import utils.HibernateUtil;
+import webservice.impl.UsersResourceImpl;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -42,6 +44,8 @@ public class UsersDAO {
     @EJB
     TokensDAO tokensDAO;
 
+    final static Logger LOG = Logger.getLogger(UsersDAO.class);
+
     public Users getByName(String name) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Users> q = cb.createQuery(Users.class);
@@ -55,7 +59,7 @@ public class UsersDAO {
 
     public String getByEmail(String email, String password) {
         // Get user by credentials
-        Users user = getByCredentials(email, password);
+        Users user = getByCredentials(email);
 
         if (password.equals(user.getPassword()))
             return tokensDAO.generateToken(user);
@@ -63,7 +67,7 @@ public class UsersDAO {
             throw new WebApplicationException(ErrorConfig.BAD_PASSWORD);
     }
 
-    private Users getByCredentials(String email, String password) {
+    private Users getByCredentials(String email) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Users> q = cb.createQuery(Users.class);
         Root<Users> from = q.from(Users.class);
@@ -77,7 +81,7 @@ public class UsersDAO {
     public String createNewUser(Users newUser) {
         // Check if user exists
         if (userExists(newUser))
-            throw new HibernateException("User exists!");
+            throw new WebApplicationException(ErrorConfig.USER_EXISTS);
 
         // Add user to database
         em.persist(newUser);
@@ -100,7 +104,8 @@ public class UsersDAO {
         try {
             user = tq.getSingleResult();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
         return (user != null);

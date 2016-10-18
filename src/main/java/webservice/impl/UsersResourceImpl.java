@@ -9,6 +9,7 @@ import webservice.UsersResource;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.NoSuchAlgorithmException;
@@ -35,7 +36,7 @@ public class UsersResourceImpl implements UsersResource {
             password = MD5Utils.StringToMD5(password);
         } catch (NoSuchAlgorithmException e) {
             LOG.error(e.getMessage());
-            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
         return usersDAO.getByEmail(email, password);
