@@ -1,6 +1,7 @@
 package webservice;
 
 import model.Users;
+import webservice.credentials.EmailPassCred;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,9 +17,13 @@ public interface UsersResource {
     @Path("/get/{name}")
     Response getByName(@PathParam("name") String name);
 
+//    @GET
+//    @Path("/get/{email}/{password}")
+//    String getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
+
     @GET
-    @Path("/get/{email}/{password}")
-    String getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
+    @Path("/")
+    String getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
     @Path("/")
