@@ -21,8 +21,8 @@ public interface UsersResource {
 //    @Path("/get/{email}/{password}")
 //    String getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
 
-    @GET
-    @Path("/")
+    @POST
+    @Path("/login")
     String getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
