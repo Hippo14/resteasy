@@ -23,6 +23,8 @@ public interface UsersResource {
 
     @POST
     @Path("/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     String getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
