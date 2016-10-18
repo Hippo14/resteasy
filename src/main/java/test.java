@@ -1,38 +1,33 @@
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
+import secure.RSA;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /**
  * Created by KMacioszek on 2016-10-18.
  */
 public class test {
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, InvalidKeySpecException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-        keyGen.initialize(1024);
+        keyGen.initialize(2048);
+        KeyPair keyPair = keyGen.genKeyPair();
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
 
-        byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
-        StringBuffer retString1 = new StringBuffer();
-        retString1.append("[");
+//        System.out.println("private key: \n" + Base64.getEncoder().encodeToString(privateKey.getEncoded()));
+//        System.out.println("public key: \n" + Base64.getEncoder().encodeToString(publicKey.getEncoded()));
 
-        for (int puk = 0; puk < publicKey.length; ++puk) {
-            retString1.append(publicKey[puk]);
-            // retString1.append(", ");
-        }
-        retString1 = retString1.delete(retString1.length()-2,retString1.length());
-        retString1.append("]");
-        System.out.println(retString1);
-
-        byte[] privateKey = keyGen.genKeyPair().getPrivate().getEncoded();
-        StringBuffer retString2 = new StringBuffer();
-        retString2.append("[");
-
-        for (int pri = 0; pri < privateKey.length; ++pri) {
-            retString2.append(privateKey[pri]);
-            // retString2.append(", ");
-        }
-        retString2 = retString2.delete(retString2.length()-2,retString2.length());
-        retString2.append("]");
-        System.out.println(retString2);
+        RSA rsa = new RSA();
+        byte[] password = rsa.encrypt("303delta");
+        System.out.println(Base64.getEncoder().encodeToString(password));
+        String decodedPassword = rsa.decrypt(password);
+        System.out.println(decodedPassword);
     }
 }
