@@ -61,6 +61,7 @@ public class UsersDAO {
         // Get user by credentials
         Users user = getByCredentials(email);
 
+        // Generate token
         if (password.equals(user.getPassword()))
             return tokensDAO.generateToken(user);
         else

@@ -65,8 +65,8 @@ public class UsersResourceImpl implements UsersResource {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
+        // Convert response to json object
         String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword));
-
 
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
