@@ -3,32 +3,70 @@ package auth;
 import auth.parts.Header;
 import auth.parts.Payload;
 import auth.parts.Signature;
+import dao.TokensDAO;
+import dao.UsersDAO;
 import model.Users;
-import model.UsersKeys;
+import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by MSI on 2016-10-17.
  */
 public class Token {
 
-    final Header header;
-    final Payload payload;
-    final Signature signature;
+    Header header;
+    Payload payload;
+    Signature signature;
 
-    final Users user;
+    Users user;
 
     public Token(Header header, Payload payload, Signature signature, Users user) {
         this.header = header;
         this.payload = payload;
         this.signature = signature;
         this.user = user;
+    }
+
+    public Token(String json, TokensDAO tokensDAO, UsersDAO usersDAO) {
+        String[] subString = json.split("\\.");
+
+        String sHeader = null;
+        String sPayload = null;
+        String sSignature = null;
+        try {
+            sHeader = new String(Base64.decodeBase64(subString[0].getBytes("UTF-8")));
+            sPayload = new String(Base64.decodeBase64(subString[1].getBytes("UTF-8")));
+            sSignature = subString[2];
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        this.header = new Header(sHeader);
+        this.payload = new Payload(sPayload);
+
+        // Signature
+        Signature signature = null;
+        String base64Signature = null;
+
+        // Get user from payload
+        Users user = usersDAO.getByName(payload.getName());
+
+        // Create signature from http header & payload and newest key from database
+        try {
+            signature = new Signature(header.toBase64(), payload.toBase64(), tokensDAO.getKey(user));
+            base64Signature = signature.toBase64();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        // Compare signatures
+        if (base64Signature.equals(sSignature))
+            // Signature are ok
+            System.out.println("DUPA");
+        else
+            // Signature not ok
+            System.out.println("CHUJ");
     }
 
     public Header getHeader() {
