@@ -19,6 +19,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -48,8 +49,37 @@ public class UsersResourceImpl implements UsersResource {
         try {
             RSA rsa = new RSA();
             decryptedPassword = rsa.decrypt(Base64.decodeBase64(credentials.getPassword().getBytes("UTF-8")));
-        } catch (Exception e) {
+        } catch (InvalidKeySpecException e) {
             LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (UnsupportedEncodingException e) {
+            LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (BadPaddingException e) {
+            LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (NoSuchAlgorithmException e) {
+            LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (InvalidKeyException e) {
+            LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (NoSuchPaddingException e) {
+            LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (IOException e) {
+            LOG.error(e);
+            e.printStackTrace();
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        } catch (IllegalBlockSizeException e) {
+            LOG.error(e);
+            e.printStackTrace();
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
@@ -57,6 +87,7 @@ public class UsersResourceImpl implements UsersResource {
             decryptedPassword = MD5Utils.StringToMD5(decryptedPassword);
         } catch (NoSuchAlgorithmException e) {
             LOG.error(e);
+            e.printStackTrace();
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 

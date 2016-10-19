@@ -20,8 +20,8 @@ public class test {
         PrivateKey privateKey = keyPair.getPrivate();
         PublicKey publicKey = keyPair.getPublic();
 
-        System.out.println("private key: \n" + new String(Base64.encodeBase64(privateKey.getEncoded())));
-        System.out.println("public key: \n" + new String(Base64.encodeBase64(publicKey.getEncoded())));
+//        System.out.println("private key: \n" + new String(Base64.encodeBase64(privateKey.getEncoded())));
+//        System.out.println("public key: \n" + new String(Base64.encodeBase64(publicKey.getEncoded())));
 
         RSA rsa = new RSA();
         byte[] password = rsa.encrypt("303delta");
