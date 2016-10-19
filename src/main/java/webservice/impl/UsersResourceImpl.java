@@ -60,6 +60,9 @@ public class UsersResourceImpl implements UsersResource {
         } catch (BadPaddingException e) {
             LOG.error(e);
             e.printStackTrace();
+            System.out.println(credentials.getEmail());
+            System.out.println(credentials.getPassword());
+
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         } catch (NoSuchAlgorithmException e) {
             LOG.error(e);
