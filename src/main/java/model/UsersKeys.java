@@ -25,6 +25,8 @@ public class UsersKeys implements Serializable {
     @Column(name = "keys")
     byte[] key;
 
+    public UsersKeys() { }
+
     public UsersKeys(Users newUser, Timestamp dateExpire, byte[] key) {
         this.user = newUser;
         this.dateExpire = dateExpire;

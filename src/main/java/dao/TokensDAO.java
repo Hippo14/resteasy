@@ -9,14 +9,12 @@ import model.UsersKeys;
 import model.UsersKeys_;
 import model.Users_;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.ejb.Stateful;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -39,14 +37,65 @@ public class TokensDAO {
     final static Logger LOG = Logger.getLogger(TokensDAO.class);
 
     private static final int TOKEN_TIME_IN_MIN = 60;
+    private static final int TOKEN_TIME = TOKEN_TIME_IN_MIN * 60 * 1000;
 
     public String generateToken(Users newUser) {
+        UsersKeys usersKeys = tokenExists(newUser);
+        byte[] key = null;
+        Timestamp dateExpire = null;
+
         // Check if newest token exists
-        String token = tokenExists(newUser);
-        if (token != null)
-            return token;
+        if (usersKeys != null) {
+            key = usersKeys.getKey();
+            dateExpire = usersKeys.getDateExpire();
+        }
+        else {
+            // Generate key
+            key = generateKey();
+            // Calculate expire date
+            Date date = new Date(System.currentTimeMillis() + TOKEN_TIME);
+            dateExpire = new Timestamp(date.getTime());
+        }
 
+        String token = null;
 
+        // Get token for user
+        token = getTokenForUser(newUser, key, dateExpire);
+
+        if (usersKeys == null)
+            // Add key to database
+            em.persist(new UsersKeys(newUser, dateExpire, key));
+
+        return token;
+    }
+
+    private UsersKeys tokenExists(Users newUser) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersKeys> q = cb.createQuery(UsersKeys.class);
+        Root<UsersKeys> from = q.from(UsersKeys.class);
+        Predicate predicate = cb.equal(from.get(UsersKeys_.user), newUser);
+
+        q.select(from).where(predicate).orderBy(cb.desc(from.get(UsersKeys_.dateExpire)));
+
+        UsersKeys key = null;
+        try {
+            key = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            key = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        Date date = new Date(System.currentTimeMillis());
+        Timestamp actualDate = new Timestamp(date.getTime());
+
+        if (key.getDateExpire().getTime() > actualDate.getTime())
+            return key;
+        else
+            return null;
+    }
+
+    private byte[] generateKey() {
         // Generate key
         byte[] key = null;
         try {
@@ -58,10 +107,11 @@ public class TokensDAO {
             LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
+        return key;
+    }
 
-        // Get token for user
-        Date date = new Date(System.currentTimeMillis() + TOKEN_TIME_IN_MIN * 60 * 1000);
-        Timestamp dateExpire = new Timestamp(date.getTime());
+    public String getTokenForUser(Users newUser, byte[] key, Timestamp dateExpire) {
+        String token = null;
 
         try {
             Token tokenO = new Token
@@ -79,35 +129,6 @@ public class TokensDAO {
             LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
-
-        // Add key to database
-        em.persist(new UsersKeys(newUser, dateExpire, key));
-
         return token;
     }
-
-    private String tokenExists(Users newUser) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<UsersKeys> q = cb.createQuery(UsersKeys.class);
-        Root<UsersKeys> from = q.from(UsersKeys.class);
-        Predicate predicate = cb.equal(from.get(UsersKeys_.user), newUser);
-
-        q.select(from).where(predicate);
-
-        UsersKeys key = null;
-        try {
-            key = em.createQuery(q).getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-
-        Date date = new Date(System.currentTimeMillis());
-        Timestamp actualDate = new Timestamp(date.getTime());
-
-        if (key.getDateExpire().getTime() < actualDate.getTime())
-            return new String(key.getKey());
-        else
-            return null;
-    }
-
 }
