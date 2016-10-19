@@ -42,7 +42,7 @@ public class UsersResourceImpl implements UsersResource {
 
     @Override
     //TODO Password must be encrypted with public RSA and send in Base64!!!!
-    public Response getByEmailAndPassword(EmailPassCred credentials) {
+    public String getByEmailAndPassword(EmailPassCred credentials) {
         String decryptedPassword = null;
         // Decrypt password
         try {
@@ -62,7 +62,8 @@ public class UsersResourceImpl implements UsersResource {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
-        return Response.ok().entity(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword)).build();
+//        return Response.ok().entity(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword)).build();
+        return usersDAO.getByEmail(credentials.getEmail(), decryptedPassword);
     }
 
     @Override
