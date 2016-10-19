@@ -3,9 +3,9 @@ package webservice.impl;
 import dao.EventsDAO;
 import model.Events;
 import webservice.EventsResource;
+import webservice.credentials.Token;
 
 import javax.ejb.EJB;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by MSI on 2016-09-25.
  */
-@Path("events")
+@Path("/events")
 @Produces(MediaType.APPLICATION_JSON)
 public class EventsResourceImpl implements EventsResource {
     
@@ -25,7 +25,7 @@ public class EventsResourceImpl implements EventsResource {
     EventsDAO eventsDAO;
 
     @Override
-    public Response getAll() {
+    public Response getAll(Token token) {
         List<Events> events = eventsDAO.getAll();
         if (events == null)
             return Response.serverError().build();

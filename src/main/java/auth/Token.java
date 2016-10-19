@@ -28,47 +28,6 @@ public class Token {
         this.user = user;
     }
 
-    public Token(String json, TokensDAO tokensDAO, UsersDAO usersDAO) {
-        String[] subString = json.split("\\.");
-
-        String sHeader = null;
-        String sPayload = null;
-        String sSignature = null;
-        try {
-            sHeader = new String(Base64.decodeBase64(subString[0].getBytes("UTF-8")));
-            sPayload = new String(Base64.decodeBase64(subString[1].getBytes("UTF-8")));
-            sSignature = subString[2];
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        this.header = new Header(sHeader);
-        this.payload = new Payload(sPayload);
-
-        // Signature
-        Signature signature = null;
-        String base64Signature = null;
-
-        // Get user from payload
-        Users user = usersDAO.getByName(payload.getName());
-
-        // Create signature from http header & payload and newest key from database
-        try {
-            signature = new Signature(header.toBase64(), payload.toBase64(), tokensDAO.getKey(user));
-            base64Signature = signature.toBase64();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        // Compare signatures
-        if (base64Signature.equals(sSignature))
-            // Signature are ok
-            System.out.println("DUPA");
-        else
-            // Signature not ok
-            System.out.println("CHUJ");
-    }
-
     public Header getHeader() {
         return header;
     }

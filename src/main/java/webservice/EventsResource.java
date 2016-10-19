@@ -1,9 +1,9 @@
 package webservice;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+
+import webservice.credentials.Token;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -12,9 +12,9 @@ import javax.ws.rs.core.Response;
  */
 @Produces(MediaType.APPLICATION_JSON)
 public interface EventsResource {
-    @GET
+    @POST
     @Path("")
-    Response getAll();
+    Response getAll(Token token);
 
     @GET
     @Path("{id}")
