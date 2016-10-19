@@ -49,14 +49,14 @@ public class UsersResourceImpl implements UsersResource {
             RSA rsa = new RSA();
             decryptedPassword = rsa.decrypt(Base64.decodeBase64(credentials.getPassword().getBytes("UTF-8")));
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
         try {
             decryptedPassword = MD5Utils.StringToMD5(decryptedPassword);
         } catch (NoSuchAlgorithmException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 

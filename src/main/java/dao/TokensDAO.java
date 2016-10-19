@@ -42,7 +42,7 @@ public class TokensDAO {
             SecretKey secretKey = keyGen.generateKey();
             key = secretKey.getEncoded();
         } catch (NoSuchAlgorithmException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
@@ -64,7 +64,7 @@ public class TokensDAO {
                     .build();
             token = tokenO.toString();
         } catch (UnsupportedEncodingException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 

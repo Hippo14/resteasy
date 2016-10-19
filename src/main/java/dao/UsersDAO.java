@@ -104,7 +104,7 @@ public class UsersDAO {
         try {
             user = tq.getSingleResult();
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            LOG.error(e);
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
