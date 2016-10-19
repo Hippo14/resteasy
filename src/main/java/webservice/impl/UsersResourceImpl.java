@@ -47,7 +47,7 @@ public class UsersResourceImpl implements UsersResource {
         // Decrypt password
         try {
             RSA rsa = new RSA();
-            decryptedPassword = rsa.decrypt(Base64.encodeBase64(credentials.getPassword().getBytes("UTF-8")));
+            decryptedPassword = rsa.decrypt(Base64.decodeBase64(credentials.getPassword().getBytes("UTF-8")));
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
