@@ -7,6 +7,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import secure.RSA;
 import utils.MD5Utils;
+import utils.ObjectToJsonUtils;
 import webservice.UsersResource;
 import webservice.credentials.EmailPassCred;
 
@@ -64,9 +65,10 @@ public class UsersResourceImpl implements UsersResource {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
+        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword));
 
 
-        return Response.ok(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword)).build();
+        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 
     @Override
