@@ -14,7 +14,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,7 +44,7 @@ public class UsersResourceImpl implements UsersResource {
 
     @Override
     //TODO Password must be encrypted with public RSA and send in Base64!!!!
-    public String getByEmailAndPassword(EmailPassCred credentials) {
+    public Response getByEmailAndPassword(EmailPassCred credentials) {
         String decryptedPassword = null;
         // Decrypt password
         try {
@@ -62,8 +64,9 @@ public class UsersResourceImpl implements UsersResource {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
-//        return Response.ok().entity(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword)).build();
-        return usersDAO.getByEmail(credentials.getEmail(), decryptedPassword);
+
+
+        return Response.ok(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword)).build();
     }
 
     @Override

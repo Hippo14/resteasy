@@ -25,7 +25,7 @@ public interface UsersResource {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    String getByEmailAndPassword(EmailPassCred credentials);
+    Response getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
     @Path("/get")
