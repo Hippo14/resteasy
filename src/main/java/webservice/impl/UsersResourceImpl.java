@@ -45,7 +45,7 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    //TODO Password must be encrypted with public RSA and send in Base64!!!!
+    //TODO Password must be encrypted with public RSA and send in Base64!!!
     public Response getByEmailAndPassword(EmailPassCred credentials) {
         String decryptedPassword = decryptPassword(credentials.getPassword());
 
