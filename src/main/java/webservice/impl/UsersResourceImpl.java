@@ -49,7 +49,6 @@ public class UsersResourceImpl implements UsersResource {
     public Response getByEmailAndPassword(EmailPassCred credentials) {
         String decryptedPassword = decryptPassword(credentials.getPassword());
 
-
         // Convert response to json object
         String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword));
 
