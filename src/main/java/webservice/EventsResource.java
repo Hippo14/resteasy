@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
  * Created by KMacioszek on 2016-10-12.
  */
 @Produces(MediaType.APPLICATION_JSON)
+@AuthFilter
 public interface EventsResource {
     @POST
     @Path("")

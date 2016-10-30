@@ -29,8 +29,9 @@ import java.util.stream.Collectors;
 /**
  * Created by MSI on 2016-10-19.
  */
-@PreMatching
 @Provider
+//@PreMatching
+@webservice.AuthFilter
 public class AuthFilter implements ContainerRequestFilter {
 
     @EJB

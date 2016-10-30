@@ -24,7 +24,7 @@ public class test {
 //        System.out.println("public key: \n" + new String(Base64.encodeBase64(publicKey.getEncoded())));
 
         RSA rsa = new RSA();
-        byte[] password = rsa.encrypt("303delta");
+        byte[] password = rsa.encrypt("mraumrau");
         System.out.println(new String(Base64.encodeBase64(password)));
         String decodedPassword = rsa.decrypt(password);
         System.out.println(decodedPassword);
