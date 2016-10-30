@@ -45,8 +45,9 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    //TODO Password must be encrypted with public RSA and send in Base64!!!
     public Response getByEmailAndPassword(EmailPassCred credentials) {
+        LOG.info("[LOGIN USER EVENT - "+ " | email: " + credentials.getEmail() + " | password: " + credentials.getPassword() + " ]");
+
         String decryptedPassword = decryptPassword(credentials.getPassword());
 
         // Convert response to json object
@@ -56,18 +57,15 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    public String registerNewUser(Users newUser) {
-        LOG.info("[NEW USER EVENT - \n"+
-                "name: " + newUser.getName() + "\n" +
-                "email: " + newUser.getEmail() + "\n" +
-                "password: " + newUser.getPassword() + "\n" +
-                " ]");
+    public Response registerNewUser(Users newUser) {
+        LOG.info("[NEW USER EVENT - "+ " | name: " + newUser.getName() + " | email: " + newUser.getEmail() + " | password: " + newUser.getPassword() + " ]");
 
         String decryptedPassword = decryptPassword(newUser.getPassword());
         newUser.setPassword(decryptedPassword);
 
         // Add new user
-        return usersDAO.createNewUser(newUser);
+        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
+        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 
     private String decryptPassword(String password) {

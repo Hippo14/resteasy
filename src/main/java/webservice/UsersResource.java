@@ -31,5 +31,5 @@ public interface UsersResource {
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    String registerNewUser(Users newUser);
+    Response registerNewUser(Users newUser);
 }
