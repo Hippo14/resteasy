@@ -57,6 +57,12 @@ public class UsersResourceImpl implements UsersResource {
 
     @Override
     public String registerNewUser(Users newUser) {
+        LOG.info("[NEW USER EVENT - \n"+
+                "name: " + newUser.getName() + "\n" +
+                "email: " + newUser.getEmail() + "\n" +
+                "password: " + newUser.getPassword() + "\n" +
+                " ]");
+
         String decryptedPassword = decryptPassword(newUser.getPassword());
         newUser.setPassword(decryptedPassword);
 

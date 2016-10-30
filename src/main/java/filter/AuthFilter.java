@@ -54,7 +54,7 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
                 .lines().collect(Collectors.joining("\n"));
-
+        //TODO Fix some issues with finding token in database
         Token jsonToken = ObjectToJsonUtils.convertToObject(result, Token.class);
         token = jsonToken.getToken();
 
