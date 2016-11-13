@@ -1,7 +1,10 @@
 package webservice.impl;
 
 import dao.EventsDAO;
+import dao.TokensDAO;
 import model.Events;
+import model.Users;
+import org.jboss.resteasy.spi.HttpRequest;
 import webservice.EventsResource;
 import webservice.credentials.Token;
 
@@ -9,10 +12,13 @@ import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
+import static model.UsersEvents_.events;
 
 /**
  * Created by MSI on 2016-09-25.
@@ -23,6 +29,8 @@ public class EventsResourceImpl implements EventsResource {
     
     @EJB
     EventsDAO eventsDAO;
+    @EJB
+    TokensDAO tokensDAO;
 
     @Override
     public Response getAll(Token token) {
@@ -44,5 +52,11 @@ public class EventsResourceImpl implements EventsResource {
     @Path("{name}")
     public Response getByName(@PathParam("name") String name) {
         return Response.ok(eventsDAO.getByName(name)).build();
+    }
+
+    @Override
+    public Response registerNewUser(@Context HttpRequest request, Events events) {
+
+        return null;
     }
 }

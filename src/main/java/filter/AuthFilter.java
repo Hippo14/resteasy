@@ -43,8 +43,7 @@ public class AuthFilter implements ContainerRequestFilter {
 
     Header header;
     Payload payload;
-    String oldSignature;
-    String newSignature;
+    byte[] signature;
 
     Users user;
 
@@ -54,34 +53,47 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
                 .lines().collect(Collectors.joining("\n"));
+        LOG.info("[Connection] Info - " + result);
         //TODO Fix some issues with finding token in database
         Token jsonToken = ObjectToJsonUtils.convertToObject(result, Token.class);
-        token = jsonToken.getToken();
+
+//        // Split token
+//        split(jsonToken.getToken());
+//
+//        // Build token object
+//        auth.Token authToken = new auth.Token.TokenBuilder()
+//                .header(header)
+//                .payload(payload)
+//                .signature(signature)
+//                .build();
 
 
-        if (token == null)
-            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
-
-        LOG.info("TOKEN REQUEST: " + token);
-
-        split(token);
-
-        if (oldSignature.equals(newSignature)) {
-            // Signatures are ok, no need new token
-//            return;
-        }
-        else {
-            // Need new token
-            token = tokensDAO.generateToken(user);
-            Token oToken = new Token(token);
-
-            // Change token to input stream
-            String jToken = ObjectToJsonUtils.convertToJson(oToken);
-
-            InputStream in = new ByteArrayInputStream(jToken.getBytes("UTF-8"));
-            requestContext.setEntityStream(in);
-//            return;
-        }
+//        token = jsonToken.getToken();
+//
+//
+//        if (token == null)
+//            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+//
+//        LOG.info("TOKEN REQUEST: " + token);
+//
+//        split(token);
+//
+//        if (oldSignature.equals(newSignature)) {
+//            // Signatures are ok, no need new token
+//            requestContext.setProperty("token", token);
+//        }
+//        else {
+//            // Need new token
+//            token = tokensDAO.generateToken(user);
+//            Token oToken = new Token(token);
+//
+//            // Change token to input stream
+//            String jToken = ObjectToJsonUtils.convertToJson(oToken);
+//
+////            InputStream in = new ByteArrayInputStream(jToken.getBytes("UTF-8"));
+////            requestContext.setEntityStream(in);
+//            requestContext.setProperty("token", token);
+//        }
     }
 
     private void split(String json) {
@@ -90,21 +102,9 @@ public class AuthFilter implements ContainerRequestFilter {
         String sHeader = null;
         String sPayload = null;
         try {
-            sHeader = new String(Base64.decodeBase64(subString[0].getBytes("UTF-8")));
-            sPayload = new String(Base64.decodeBase64(subString[1].getBytes("UTF-8")));
-            oldSignature = subString[2];
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        header = new Header(sHeader);
-        payload = new Payload(sPayload);
-
-        // Get user from payload
-        user = usersDAO.getByName(payload.getName());
-
-        try {
-            newSignature = new Signature(header.toBase64(), payload.toBase64(), tokensDAO.getKey(user)).toBase64();
+            header = new Header(new String(Base64.decodeBase64(subString[0].getBytes("UTF-8"))));
+            payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            signature = Base64.decodeBase64(subString[2].getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
