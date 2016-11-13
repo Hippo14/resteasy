@@ -11,6 +11,8 @@ import model.Users;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.TypeFactory;
 import utils.ObjectToJsonUtils;
 import webservice.credentials.Token;
 
@@ -24,6 +26,8 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -38,13 +42,10 @@ public class AuthFilter implements ContainerRequestFilter {
     @EJB
     UsersDAO usersDAO;
 
-    String token;
-
     Header header;
     Payload payload;
     byte[] signature;
 
-    Users user;
 
     final static Logger LOG = Logger.getLogger(AuthFilter.class);
 
@@ -52,7 +53,22 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
                 .lines().collect(Collectors.joining("\n"));
-        LOG.info("[CONNECTION EVENT] Info - " + result);
+        LOG.info("[CONNECTION EVENT: INFO - " + result + "]");
+
+        // Request to hashmap
+        Map<String, String> request = new ObjectMapper().readValue(result, TypeFactory.mapType(HashMap.class, String.class, String.class));
+
+        // Find token in request
+        String token = request.get("token");
+
+        if (token == null) {
+            LOG.error("[CONNECTION EVENT: ERROR - " + "Token is empty!" + "]");
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        }
+
+        // Split token
+        split(token);
+
         //TODO Fix some issues with finding token in database
 //        Token jsonToken = ObjectToJsonUtils.convertToObject(result, Token.class);
 
