@@ -1,11 +1,8 @@
 package webservice;
 
-
-import model.Events;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.Token;
 
-import javax.enterprise.event.Event;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +30,6 @@ public interface EventsResource {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response registerNewUser(@Context HttpRequest request, Events events);
+    Response registerNewUser(@Context HttpRequest request);
 
 }

@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
  * Created by MSI on 2016-10-19.
  */
 @Provider
-//@PreMatching
 @webservice.AuthFilter
 public class AuthFilter implements ContainerRequestFilter {
 
@@ -53,9 +52,9 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
                 .lines().collect(Collectors.joining("\n"));
-        LOG.info("[Connection] Info - " + result);
+        LOG.info("[CONNECTION EVENT] Info - " + result);
         //TODO Fix some issues with finding token in database
-        Token jsonToken = ObjectToJsonUtils.convertToObject(result, Token.class);
+//        Token jsonToken = ObjectToJsonUtils.convertToObject(result, Token.class);
 
 //        // Split token
 //        split(jsonToken.getToken());

@@ -5,6 +5,7 @@ import dao.TokensDAO;
 import model.Events;
 import model.Users;
 import org.jboss.resteasy.spi.HttpRequest;
+import webservice.AuthFilter;
 import webservice.EventsResource;
 import webservice.credentials.Token;
 
@@ -24,6 +25,7 @@ import static model.UsersEvents_.events;
  * Created by MSI on 2016-09-25.
  */
 @Path("/events")
+@AuthFilter
 @Produces(MediaType.APPLICATION_JSON)
 public class EventsResourceImpl implements EventsResource {
     
@@ -55,8 +57,7 @@ public class EventsResourceImpl implements EventsResource {
     }
 
     @Override
-    public Response registerNewUser(@Context HttpRequest request, Events events) {
-
+    public Response registerNewUser(@Context HttpRequest request) {
         return null;
     }
 }
