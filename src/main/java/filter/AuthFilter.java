@@ -44,7 +44,7 @@ public class AuthFilter implements ContainerRequestFilter {
 
     Header header;
     Payload payload;
-    byte[] signature;
+    String signature;
 
 
     final static Logger LOG = Logger.getLogger(AuthFilter.class);
@@ -56,10 +56,11 @@ public class AuthFilter implements ContainerRequestFilter {
         LOG.info("[CONNECTION EVENT: INFO - " + result + "]");
 
         // Request to hashmap
-        Map<String, String> request = new ObjectMapper().readValue(result, TypeFactory.mapType(HashMap.class, String.class, String.class));
+//        Map<String, String> request = new ObjectMapper().readValue(result, TypeFactory.mapType(HashMap.class, String.class, String.class));
+        HashMap<String, Object> request = new ObjectMapper().readValue(result, HashMap.class);
 
         // Find token in request
-        String token = request.get("token");
+        String token = (String) request.get("token");
 
         if (token == null) {
             LOG.error("[CONNECTION EVENT: ERROR - " + "Token is empty!" + "]");
@@ -70,56 +71,39 @@ public class AuthFilter implements ContainerRequestFilter {
         split(token);
 
         //TODO Fix some issues with finding token in database
-//        Token jsonToken = ObjectToJsonUtils.convertToObject(result, Token.class);
+        // Get user from payload
+        Users user = usersDAO.getByName(payload.getName());
 
-//        // Split token
-//        split(jsonToken.getToken());
-//
-//        // Build token object
-//        auth.Token authToken = new auth.Token.TokenBuilder()
-//                .header(header)
-//                .payload(payload)
-//                .signature(signature)
-//                .build();
+        String oldSignature = signature;
+        String newSignature = new Signature(header.toBase64(), payload.toBase64(), tokensDAO.getKey(user)).toBase64();
 
+        if (oldSignature.equals(newSignature)) {
+            // Signatures are ok
+        }
+        else {
+            // Need new token
+            token = tokensDAO.generateToken(user);
+            request.put("token", token);
 
-//        token = jsonToken.getToken();
-//
-//
-//        if (token == null)
-//            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
-//
-//        LOG.info("TOKEN REQUEST: " + token);
-//
-//        split(token);
-//
-//        if (oldSignature.equals(newSignature)) {
-//            // Signatures are ok, no need new token
-//            requestContext.setProperty("token", token);
-//        }
-//        else {
-//            // Need new token
-//            token = tokensDAO.generateToken(user);
-//            Token oToken = new Token(token);
-//
-//            // Change token to input stream
-//            String jToken = ObjectToJsonUtils.convertToJson(oToken);
-//
-////            InputStream in = new ByteArrayInputStream(jToken.getBytes("UTF-8"));
-////            requestContext.setEntityStream(in);
-//            requestContext.setProperty("token", token);
-//        }
+//            String newBody = ObjectToJsonUtils.convertToJson(request);
+
+            // Change to new body
+//            InputStream in = new ByteArrayInputStream(newBody.getBytes("UTF-8"));
+//            requestContext.setEntityStream(in);
+        }
+        requestContext.setProperty("request", request);
+
+        LOG.info("");
     }
 
     private void split(String json) {
         String[] subString = json.split("\\.");
 
-        String sHeader = null;
-        String sPayload = null;
         try {
             header = new Header(new String(Base64.decodeBase64(subString[0].getBytes("UTF-8"))));
             payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            signature = Base64.decodeBase64(subString[2].getBytes("UTF-8"));
+//            signature = Base64.decodeBase64(subString[2].getBytes("UTF-8"));
+            signature = subString[2];
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

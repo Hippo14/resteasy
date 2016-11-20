@@ -33,11 +33,13 @@ public class Events implements Serializable {
     @Column(name = "active")
     Byte active;
     @Column(name = "date_creation")
-    Timestamp dateCreation;
+    Timestamp date_creation;
     @Column(name = "date_updated", nullable = false)
-    Timestamp dateUpdated;
+    Timestamp date_updated;
     @Column(name = "date_ending")
-    Timestamp dateEnding;
+    Timestamp date_ending;
+
+    public Events() {}
 
     public int getId() {
         return id;
@@ -111,28 +113,28 @@ public class Events implements Serializable {
         this.active = active;
     }
 
-    public Timestamp getDateCreation() {
-        return dateCreation;
+    public Timestamp getDate_creation() {
+        return date_creation;
     }
 
-    public void setDateCreation(Timestamp dateCreation) {
-        this.dateCreation = dateCreation;
+    public void setDate_creation(Timestamp date_creation) {
+        this.date_creation = date_creation;
     }
 
-    public Timestamp getDateUpdated() {
-        return dateUpdated;
+    public Timestamp getDate_updated() {
+        return date_updated;
     }
 
-    public void setDateUpdated(Timestamp dateUpdated) {
-        this.dateUpdated = dateUpdated;
+    public void setDate_updated(Timestamp date_updated) {
+        this.date_updated = date_updated;
     }
 
-    public Timestamp getDateEnding() {
-        return dateEnding;
+    public Timestamp getDate_ending() {
+        return date_ending;
     }
 
-    public void setDateEnding(Timestamp dateEnding) {
-        this.dateEnding = dateEnding;
+    public void setDate_ending(Timestamp date_ending) {
+        this.date_ending = date_ending;
     }
 
 //    @Override

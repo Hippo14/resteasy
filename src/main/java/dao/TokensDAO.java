@@ -153,4 +153,25 @@ public class TokensDAO {
         return key.getKey();
     }
 
+    @Deprecated
+    public byte[] getKey(byte[] key) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersKeys> q = cb.createQuery(UsersKeys.class);
+        Root<UsersKeys> from = q.from(UsersKeys.class);
+        Predicate predicate = cb.equal(from.get(UsersKeys_.key), key);
+
+        q.select(from).where(predicate).orderBy(cb.desc(from.get(UsersKeys_.dateExpire)));
+
+        UsersKeys usersKeys = null;
+        try {
+            usersKeys = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            usersKeys = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        return usersKeys.getKey();
+    }
+
 }

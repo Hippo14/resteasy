@@ -1,10 +1,15 @@
 package webservice.impl;
 
+import auth.parts.Payload;
 import dao.EventsDAO;
 import dao.TokensDAO;
+import dao.UsersDAO;
 import model.Events;
 import model.Users;
+import org.apache.commons.codec.binary.Base64;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
+import utils.ObjectToJsonUtils;
 import webservice.AuthFilter;
 import webservice.EventsResource;
 import webservice.credentials.Token;
@@ -13,10 +18,15 @@ import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 
 import static model.UsersEvents_.events;
@@ -33,6 +43,8 @@ public class EventsResourceImpl implements EventsResource {
     EventsDAO eventsDAO;
     @EJB
     TokensDAO tokensDAO;
+    @EJB
+    UsersDAO usersDAO;
 
     @Override
     public Response getAll(Token token) {
@@ -57,7 +69,39 @@ public class EventsResourceImpl implements EventsResource {
     }
 
     @Override
-    public Response registerNewUser(@Context HttpRequest request) {
-        return null;
+    public Response registerNewEvent(@Context HttpRequest request) {
+        HashMap<String, Object> hashMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");
+        ObjectMapper mapper = new ObjectMapper();
+
+        String token = (String) hashMap.get("token");
+
+        try {
+            Payload payload = new Payload(new String(Base64.decodeBase64(token.split("\\.")[1].getBytes("UTF-8"))));
+
+            // Get actual user
+            Users user = usersDAO.getByName(payload.getName());
+
+            body.put("users", mapper.convertValue(user, HashMap.class));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Events event = null;
+        try {
+            event = mapper.convertValue(body, Events.class);
+        } catch (Exception e) {
+            throw new WebApplicationException("Cannot parse to object!");
+        }
+
+        // Check if event exists
+        Events eventDb = eventsDAO.getByName(event.getName());
+        if (eventDb != null) {
+            throw new WebApplicationException("Event exists!");
+        }
+        eventsDAO.add(event);
+
+
+        return Response.status(201).build();
     }
 }

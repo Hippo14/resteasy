@@ -4,10 +4,7 @@ import model.Events;
 import model.Events_;
 
 import javax.ejb.Stateful;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -46,6 +43,19 @@ public class EventsDAO {
 
         q.select(from).where(predicate);
 
-        return em.createQuery(q).getSingleResult();
+        Events events = null;
+        try {
+            events = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            events = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        return events;
+    }
+
+    public void add(Events event) {
+        em.persist(event);
     }
 }

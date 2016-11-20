@@ -30,6 +30,6 @@ public interface EventsResource {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response registerNewUser(@Context HttpRequest request);
+    Response registerNewEvent(@Context HttpRequest request);
 
 }

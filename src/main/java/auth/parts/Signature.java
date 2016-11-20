@@ -47,6 +47,7 @@ public class Signature implements IParts {
             String header64 = new String(Base64.encodeBase64(header.getBytes("UTF-8")));
             String payload64 = new String(Base64.encodeBase64(payload.getBytes("UTF-8")));
             encode = Hex.encodeHexString(algorithm.doFinal((header64 + "." + payload64).getBytes("UTF-8")));
+
             return new String(Base64.encodeBase64(encode.getBytes("UTF-8")));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
