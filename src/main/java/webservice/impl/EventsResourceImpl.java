@@ -106,6 +106,6 @@ public class EventsResourceImpl implements EventsResource {
         eventsDAO.add(event);
 
 
-        return Response.status(201).build();
+        return Response.ok("Event added").build();
     }
 }
