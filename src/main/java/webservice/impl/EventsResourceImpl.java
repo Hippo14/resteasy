@@ -105,7 +105,7 @@ public class EventsResourceImpl implements EventsResource {
         }
         eventsDAO.add(event);
 
-
-        return Response.ok("Event added").build();
+        String jsonResponse = ObjectToJsonUtils.convertToJson("Event added");
+        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 }
