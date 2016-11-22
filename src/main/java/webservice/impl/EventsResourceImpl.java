@@ -7,6 +7,7 @@ import dao.UsersDAO;
 import model.Events;
 import model.Users;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
 import utils.ObjectToJsonUtils;
@@ -46,6 +47,8 @@ public class EventsResourceImpl implements EventsResource {
     @EJB
     UsersDAO usersDAO;
 
+    final static Logger LOG = Logger.getLogger(EventsResourceImpl.class);
+
     @Override
     public Response getAll(Token token) {
         List<Events> events = eventsDAO.getAll();
@@ -84,13 +87,14 @@ public class EventsResourceImpl implements EventsResource {
 
             body.put("users", mapper.convertValue(user, HashMap.class));
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
 
         Events event = null;
         try {
             event = mapper.convertValue(body, Events.class);
         } catch (Exception e) {
+            LOG.error(e);
             throw new WebApplicationException("Cannot parse to object!");
         }
 
