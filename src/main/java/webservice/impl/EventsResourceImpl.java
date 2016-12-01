@@ -113,8 +113,8 @@ public class EventsResourceImpl implements EventsResource {
         ObjectMapper mapper = new ObjectMapper();
 
         String cityName = (String) body.get("cityName");
-        double latitude = Double.parseDouble((String) body.get("latitude"));
-        double longitude = Double.parseDouble((String) body.get("longitude"));
+        double latitude = (double) body.get("latitude");
+        double longitude = (double) body.get("longitude");
 
         List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude);
 
