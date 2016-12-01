@@ -10,12 +10,21 @@ import java.io.UnsupportedEncodingException;
  */
 public class Header implements IParts {
 
-    private final String alg;
-    private final String typ;
+    private String alg;
+    private String typ;
 
     public Header () {
+    }
+
+    public Header(String alg, String typ) {
         this.alg = "HS256";
         this.typ = "JWT";
+    }
+
+    public Header(String header) {
+        Header temp = ObjectToJsonUtils.convertToObject(header, Header.class);
+        this.alg = temp.getAlg();
+        this.typ = temp.getTyp();
     }
 
     public String getAlg() {
@@ -24,6 +33,14 @@ public class Header implements IParts {
 
     public String getTyp() {
         return typ;
+    }
+
+    public void setAlg(String alg) {
+        this.alg = alg;
+    }
+
+    public void setTyp(String typ) {
+        this.typ = typ;
     }
 
     @Override

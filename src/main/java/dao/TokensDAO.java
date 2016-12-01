@@ -3,13 +3,14 @@ package dao;
 import auth.Token;
 import auth.parts.Header;
 import auth.parts.Payload;
+import auth.parts.Signature;
 import config.ErrorConfig;
 import model.Users;
 import model.UsersKeys;
 import model.UsersKeys_;
 import model.Users_;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -116,7 +117,7 @@ public class TokensDAO {
         try {
             Token tokenO = new Token
                     .TokenBuilder()
-                    .header(new Header())
+                    .header(new Header("HS256", "JWT"))
                     .payload(new Payload(
                             dateExpire,
                             newUser.getName(),
@@ -131,4 +132,46 @@ public class TokensDAO {
         }
         return token;
     }
+
+    public byte[] getKey(Users user) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersKeys> q = cb.createQuery(UsersKeys.class);
+        Root<UsersKeys> from = q.from(UsersKeys.class);
+        Predicate predicate = cb.equal(from.get(UsersKeys_.user), user);
+
+        q.select(from).where(predicate).orderBy(cb.desc(from.get(UsersKeys_.dateExpire)));
+
+        UsersKeys key = null;
+        try {
+            key = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            key = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        return key.getKey();
+    }
+
+    @Deprecated
+    public byte[] getKey(byte[] key) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersKeys> q = cb.createQuery(UsersKeys.class);
+        Root<UsersKeys> from = q.from(UsersKeys.class);
+        Predicate predicate = cb.equal(from.get(UsersKeys_.key), key);
+
+        q.select(from).where(predicate).orderBy(cb.desc(from.get(UsersKeys_.dateExpire)));
+
+        UsersKeys usersKeys = null;
+        try {
+            usersKeys = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            usersKeys = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        return usersKeys.getKey();
+    }
+
 }

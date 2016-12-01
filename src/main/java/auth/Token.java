@@ -3,26 +3,23 @@ package auth;
 import auth.parts.Header;
 import auth.parts.Payload;
 import auth.parts.Signature;
+import dao.TokensDAO;
+import dao.UsersDAO;
 import model.Users;
-import model.UsersKeys;
+import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by MSI on 2016-10-17.
  */
 public class Token {
 
-    final Header header;
-    final Payload payload;
-    final Signature signature;
+    Header header;
+    Payload payload;
+    Signature signature;
 
-    final Users user;
+    Users user;
 
     public Token(Header header, Payload payload, Signature signature, Users user) {
         this.header = header;

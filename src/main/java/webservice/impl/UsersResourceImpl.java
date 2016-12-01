@@ -22,6 +22,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -44,13 +45,35 @@ public class UsersResourceImpl implements UsersResource {
     }
 
     @Override
-    //TODO Password must be encrypted with public RSA and send in Base64!!!!
     public Response getByEmailAndPassword(EmailPassCred credentials) {
+        LOG.info("[LOGIN USER EVENT - "+ " | email: " + credentials.getEmail() + " | password: " + credentials.getPassword() + " ]");
+
+        String decryptedPassword = decryptPassword(credentials.getPassword());
+
+        // Convert response to json object
+        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword));
+
+        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+    }
+
+    @Override
+    public Response registerNewUser(Users newUser) {
+        LOG.info("[NEW USER EVENT - "+ " | name: " + newUser.getName() + " | email: " + newUser.getEmail() + " | password: " + newUser.getPassword() + " ]");
+
+        String decryptedPassword = decryptPassword(newUser.getPassword());
+        newUser.setPassword(decryptedPassword);
+
+        // Add new user
+        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
+        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+    }
+
+    private String decryptPassword(String password) {
         String decryptedPassword = null;
         // Decrypt password
         try {
             RSA rsa = new RSA();
-            decryptedPassword = rsa.decrypt(Base64.decodeBase64(credentials.getPassword().getBytes("UTF-8")));
+            decryptedPassword = rsa.decrypt(Base64.decodeBase64(password.getBytes("UTF-8")));
         } catch (Exception e) {
             LOG.error(e);
             e.printStackTrace();
@@ -65,15 +88,7 @@ public class UsersResourceImpl implements UsersResource {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
-        // Convert response to json object
-        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.getByEmail(credentials.getEmail(), decryptedPassword));
-
-        return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
-    }
-
-    @Override
-    public String registerNewUser(Users newUser) {
-        return usersDAO.createNewUser(newUser);
+        return decryptedPassword;
     }
 
 }

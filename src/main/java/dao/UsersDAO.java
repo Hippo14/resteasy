@@ -88,7 +88,7 @@ public class UsersDAO {
         em.persist(newUser);
 
         // Generate token
-        return tokensDAO.generateToken(newUser);
+        return getByEmail(newUser.getEmail(), newUser.getPassword());
     }
 
     private boolean userExists(Users newUser) {
@@ -101,15 +101,13 @@ public class UsersDAO {
         tq.setMaxResults(1);
 
         Users user = null;
-
         try {
             user = tq.getSingleResult();
         } catch (Exception e) {
+            // User not exists!!
             LOG.error(e);
-            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
         return (user != null);
-
     }
 }

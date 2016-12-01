@@ -28,8 +28,8 @@ public interface UsersResource {
     Response getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
-    @Path("/get")
+    @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    String registerNewUser(Users newUser);
+    Response registerNewUser(Users newUser);
 }

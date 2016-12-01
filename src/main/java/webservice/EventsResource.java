@@ -1,20 +1,24 @@
 package webservice;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import model.Events;
+import org.jboss.resteasy.spi.HttpRequest;
+import webservice.credentials.Token;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by KMacioszek on 2016-10-12.
  */
 @Produces(MediaType.APPLICATION_JSON)
+@AuthFilter
 public interface EventsResource {
-    @GET
+    @POST
     @Path("")
-    Response getAll();
+    Response getAll(Token token);
 
     @GET
     @Path("{id}")
@@ -23,4 +27,17 @@ public interface EventsResource {
     @GET
     @Path("{name}")
     Response getByName(@PathParam("name") String name);
+
+    @POST
+    @Path("/add")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response registerNewEvent(@Context HttpRequest request);
+
+    @POST
+    @Path("/get")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    List<Events> getEvents(@Context HttpRequest request);
+
 }

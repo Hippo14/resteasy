@@ -1,5 +1,9 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import utils.TimestampDeserializer;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -27,7 +31,7 @@ public class Users implements Serializable {
     Byte deleted;
     @Column(name = "date_creation")
     Timestamp dateCreation;
-    @Column(name = "date_updated", nullable = false)
+    @Column(name = "date_updated", nullable = false, insertable = false)
     Timestamp dateUpdated;
     @Column(name = "date_deleted")
     Timestamp dateDeleted;
