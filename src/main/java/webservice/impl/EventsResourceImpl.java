@@ -24,13 +24,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-
-import static model.UsersEvents_.events;
 
 /**
  * Created by MSI on 2016-09-25.
@@ -108,4 +104,20 @@ public class EventsResourceImpl implements EventsResource {
         String jsonResponse = ObjectToJsonUtils.convertToJson("Event added");
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
+
+    @Override
+    public List<Events> getEvents(@Context HttpRequest request) {
+        HashMap<String, Object> hashMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");
+        ObjectMapper mapper = new ObjectMapper();
+
+        String cityName = (String) body.get("cityName");
+        double latitude = Double.parseDouble((String) body.get("latitude"));
+        double longitude = Double.parseDouble((String) body.get("longitude"));
+
+        List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude);
+
+        return eventsList;
+    }
+
 }

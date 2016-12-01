@@ -5,10 +5,7 @@ import model.Events_;
 
 import javax.ejb.Stateful;
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 /**
@@ -57,5 +54,26 @@ public class EventsDAO {
 
     public void add(Events event) {
         em.persist(event);
+    }
+
+    public List<Events> getByLocation(String cityName, double latitude, double longitude) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Events> q = cb.createQuery(Events.class);
+        Root<Events> from = q.from(Events.class);
+
+        Path<Double> latitudeDb = from.get("latitude");
+        Path<Double> longitudeDb = from.get("longitude");
+        Predicate predicate = cb.and(
+                cb.gt(latitudeDb, latitude - 0.5),
+                cb.lt(latitudeDb, latitude + 0.5),
+                cb.gt(longitudeDb, longitude - 0.5),
+                cb.lt(longitudeDb, longitude + 0.5)
+        );
+        q.select(from).where(predicate);
+
+        TypedQuery<Events> query = em.createQuery(q);
+
+
+       return query.getResultList();
     }
 }

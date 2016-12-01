@@ -84,6 +84,7 @@ public class AuthFilter implements ContainerRequestFilter {
             // Need new token
             token = tokensDAO.generateToken(user);
             request.put("token", token);
+            request.put("newToken", true);
 
 //            String newBody = ObjectToJsonUtils.convertToJson(request);
 

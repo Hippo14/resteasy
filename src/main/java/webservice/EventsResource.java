@@ -1,5 +1,6 @@
 package webservice;
 
+import model.Events;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.Token;
 
@@ -7,6 +8,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by KMacioszek on 2016-10-12.
@@ -31,5 +33,11 @@ public interface EventsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewEvent(@Context HttpRequest request);
+
+    @POST
+    @Path("/get")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    List<Events> getEvents(@Context HttpRequest request);
 
 }
