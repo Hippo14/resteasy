@@ -7,6 +7,7 @@ import dao.UsersDAO;
 import model.Events;
 import model.Users;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
@@ -116,6 +117,8 @@ public class EventsResourceImpl implements EventsResource {
         double longitude = Double.parseDouble((String) body.get("longitude"));
 
         List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude);
+
+        LOG.info("[GET EVENTS - " + eventsList + " latitude: " + latitude + " longitude:" + longitude);
 
         return eventsList;
     }
