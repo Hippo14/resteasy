@@ -101,7 +101,7 @@ public class EventsDAO {
         Marker marker = new Marker();
         marker.setTitle(events.getName());
         marker.setUsername(events.getUsers().getName());
-        marker.setDescription(events.getDescription());
+        marker.setDescription(events.getShortDescription());
 
         return marker;
     }

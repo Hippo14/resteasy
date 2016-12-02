@@ -137,6 +137,12 @@ public class Events implements Serializable {
         this.date_ending = date_ending;
     }
 
+    public String getShortDescription() {
+        StringBuilder shortDescription = new StringBuilder("");
+        shortDescription.append(description.substring(0, 32)).append("...");
+        return shortDescription.toString();
+    }
+
 //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) return true;
