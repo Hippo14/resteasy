@@ -2,6 +2,7 @@ package dao;
 
 import model.Events;
 import model.Events_;
+import model.Marker;
 
 import javax.ejb.Stateful;
 import javax.persistence.*;
@@ -75,5 +76,33 @@ public class EventsDAO {
 
 
        return query.getResultList();
+    }
+
+    public Marker getMarkerDetails(String cityName, double latitude, double longitude) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Events> q = cb.createQuery(Events.class);
+        Root<Events> from = q.from(Events.class);
+        Predicate predicate = cb.and(
+                cb.equal(from.get(Events_.latitude), latitude),
+                cb.equal(from.get(Events_.longitude), longitude)
+        );
+
+        q.select(from).where(predicate);
+
+        Events events = null;
+        try {
+            events = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            events = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        Marker marker = new Marker();
+        marker.setTitle(events.getName());
+        marker.setUsername(events.getUsers().getName());
+        marker.setDescription(events.getDescription());
+
+        return marker;
     }
 }

@@ -18,9 +18,7 @@ import webservice.credentials.Token;
 
 import javax.ejb.EJB;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.container.*;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
@@ -35,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Provider
 @webservice.AuthFilter
-public class AuthFilter implements ContainerRequestFilter {
+public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
     @EJB
     TokensDAO tokensDAO;
@@ -53,7 +51,7 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
                 .lines().collect(Collectors.joining("\n"));
-        LOG.info("[CONNECTION EVENT: INFO - " + result + "]");
+        LOG.info("[CONNECTION EVENT: REQUEST - " + result + "]");
 
         // Request to hashmap
 //        Map<String, String> request = new ObjectMapper().readValue(result, TypeFactory.mapType(HashMap.class, String.class, String.class));
@@ -108,6 +106,11 @@ public class AuthFilter implements ContainerRequestFilter {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+        LOG.info("[CONNECTION EVENT: RESPONSE - requestContext - " + requestContext + " responseContext - " + responseContext +" ]");
     }
 //
 //    @Override
