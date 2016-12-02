@@ -1,6 +1,7 @@
 package webservice;
 
 import model.Events;
+import model.Marker;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.Token;
 
@@ -39,5 +40,11 @@ public interface EventsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     List<Events> getEvents(@Context HttpRequest request);
+
+    @POST
+    @Path("/marker")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Marker getMarkerDetails(@Context HttpRequest request);
 
 }

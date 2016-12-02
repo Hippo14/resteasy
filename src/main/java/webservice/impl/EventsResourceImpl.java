@@ -5,8 +5,10 @@ import dao.EventsDAO;
 import dao.TokensDAO;
 import dao.UsersDAO;
 import model.Events;
+import model.Marker;
 import model.Users;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
@@ -112,12 +114,31 @@ public class EventsResourceImpl implements EventsResource {
         ObjectMapper mapper = new ObjectMapper();
 
         String cityName = (String) body.get("cityName");
-        double latitude = Double.parseDouble((String) body.get("latitude"));
-        double longitude = Double.parseDouble((String) body.get("longitude"));
+        double latitude = (double) body.get("latitude");
+        double longitude = (double) body.get("longitude");
 
         List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude);
 
+        LOG.info("[GET EVENTS - " + eventsList + " latitude: " + latitude + " longitude:" + longitude + " cityName" + cityName);
+
         return eventsList;
+    }
+
+    @Override
+    public Marker getMarkerDetails(@Context HttpRequest request) {
+        HashMap<String, Object> hashMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");
+        ObjectMapper mapper = new ObjectMapper();
+
+        String cityName = (String) body.get("cityName");
+        double latitude = (double) body.get("latitude");
+        double longitude = (double) body.get("longitude");
+
+        Marker marker = eventsDAO.getMarkerDetails(cityName, latitude, longitude);
+
+        LOG.info("[GET MARKER DETAILS - " + marker + " latitude: " + latitude + " longitude:" + longitude + " cityName" + cityName);
+
+        return marker;
     }
 
 }
