@@ -47,4 +47,10 @@ public interface EventsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     Marker getMarkerDetails(@Context HttpRequest request);
 
+    @POST
+    @Path("/details")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Events getEventDetails(@Context HttpRequest request);
+
 }

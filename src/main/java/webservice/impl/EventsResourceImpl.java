@@ -141,4 +141,20 @@ public class EventsResourceImpl implements EventsResource {
         return marker;
     }
 
+    @Override
+    public Events getEventDetails(@Context HttpRequest request) {
+        HashMap<String, Object> hashMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");
+        ObjectMapper mapper = new ObjectMapper();
+
+        double latitude = (double) body.get("latitude");
+        double longitude = (double) body.get("longitude");
+
+        Events event = eventsDAO.getByLocation(latitude, longitude);
+
+        LOG.info("[GET EVENTS DETAILS- " + event + " latitude: " + latitude + " longitude:" + longitude);
+
+        return event;
+    }
+
 }
