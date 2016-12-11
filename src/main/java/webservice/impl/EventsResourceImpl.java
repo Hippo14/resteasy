@@ -18,6 +18,7 @@ import webservice.EventsResource;
 import webservice.credentials.Token;
 
 import javax.ejb.EJB;
+import javax.enterprise.event.Event;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -119,7 +120,12 @@ public class EventsResourceImpl implements EventsResource {
 
         List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude);
 
-        LOG.info("[GET EVENTS - " + eventsList + " latitude: " + latitude + " longitude:" + longitude + " cityName" + cityName);
+        StringBuilder eventString = new StringBuilder("");
+        for (Events event : eventsList) {
+            eventString.append(event.getName() + " " + event.getId() + "\n");
+        }
+
+        LOG.info("[GET EVENTS - " + eventString.toString() + " latitude: " + latitude + " longitude:" + longitude + " cityName" + cityName);
 
         return eventsList;
     }
