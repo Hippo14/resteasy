@@ -101,7 +101,10 @@ public class EventsDAO {
         Marker marker = new Marker();
         marker.setTitle(events.getName());
         marker.setUsername(events.getUsers().getName());
-        marker.setDescription(events.getShortDescription());
+        String description = events.getDescription();
+        if (description.length() >= 16)
+            description = description.substring(0, 16);
+        marker.setDescription(description);
 
         return marker;
     }
