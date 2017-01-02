@@ -139,9 +139,14 @@ public class EventsDAO {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Events> q = cb.createQuery(Events.class);
         Root<Events> from = q.from(Events.class);
+
+        Path<Double> latitudeDb = from.get("latitude");
+        Path<Double> longitudeDb = from.get("longitude");
         Predicate predicate = cb.and(
-                cb.equal(from.get(Events_.latitude), latitude),
-                cb.equal(from.get(Events_.longitude), longitude)
+                cb.gt(latitudeDb, latitude - 0.5),
+                cb.lt(latitudeDb, latitude + 0.5),
+                cb.gt(longitudeDb, longitude - 0.5),
+                cb.lt(longitudeDb, longitude + 0.5)
         );
 
         q.select(from).where(predicate);

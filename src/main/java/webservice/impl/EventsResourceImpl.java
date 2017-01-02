@@ -168,11 +168,11 @@ public class EventsResourceImpl implements EventsResource {
     @Override
     public Map<String, Map<String, String>> getBoard(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
-        HashMap<String, Object> body = (HashMap<String, Object>) requestMap.get("body");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
         ObjectMapper mapper = new ObjectMapper();
 
-        double latitude = Double.parseDouble((String)body.get("latitude"));
-        double longitude = Double.parseDouble((String)body.get("longitude"));
+        double latitude = Double.parseDouble(body.get("latitude"));
+        double longitude = Double.parseDouble(body.get("longitude"));
 
         Map<String, Map<String, String>> response = new HashMap<>();
 
