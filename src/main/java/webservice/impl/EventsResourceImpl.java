@@ -215,6 +215,8 @@ public class EventsResourceImpl implements EventsResource {
                 Map<String, String> map = new HashMap<>();
                 map.put("name", event.getName());
                 map.put("description", event.getDescription());
+                map.put("latitude", Double.toString(event.getLatitude()));
+                map.put("longitude", Double.toString(event.getLongitude()));
                 response.put(Integer.toString(i++), map);
             }
             LOG.info("[GET EVENTS BY USER - username" + username + " response" + response);
