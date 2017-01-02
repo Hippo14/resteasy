@@ -197,7 +197,7 @@ public class EventsResourceImpl implements EventsResource {
         HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
         ObjectMapper mapper = new ObjectMapper();
 
-        String token = body.get("token");
+        String token = (String) requestMap.get("token");
         Map<String, Map<String, String>> response = new HashMap<>();
 
         try {
@@ -206,7 +206,9 @@ public class EventsResourceImpl implements EventsResource {
             Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
             String username = payload.getName();
 
-            List<Events> eventsList = eventsDAO.getByUsername(username);
+            Users user = usersDAO.getByName(username);
+
+            List<Events> eventsList = eventsDAO.getByUsername(user);
 
             int i = 0;
             for (Events event : eventsList) {

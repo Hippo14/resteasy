@@ -3,6 +3,7 @@ package dao;
 import model.Events;
 import model.Events_;
 import model.Marker;
+import model.Users;
 
 import javax.ejb.Stateful;
 import javax.persistence.*;
@@ -161,11 +162,12 @@ public class EventsDAO {
         return board;
     }
 
-    public List<Events> getByUsername(String username) {
+    public List<Events> getByUsername(Users username) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Events> q = cb.createQuery(Events.class);
         Root<Events> from = q.from(Events.class);
-        Predicate predicate = cb.equal(from.get(Events_.users.getName()), username);
+
+        Predicate predicate = cb.equal(from.get(Events_.users), username);
 
         q.select(from).where(predicate);
 
