@@ -174,10 +174,9 @@ public class EventsResourceImpl implements EventsResource {
         double latitude = Double.parseDouble(body.get("latitude"));
         double longitude = Double.parseDouble(body.get("longitude"));
 
-        Map<String, Map<String, String>> response = new HashMap<>();
-
         List<Events> boardList = eventsDAO.getTopEvents(latitude, longitude, 10);
 
+        Map<String, Map<String, String>> response = new HashMap<>();
         int i = 0;
         for (Events event : boardList) {
             Map<String, String> map = new HashMap<>();
@@ -187,7 +186,41 @@ public class EventsResourceImpl implements EventsResource {
             response.put(Integer.toString(i++), map);
         }
 
-        LOG.info("[GET BOARD DETAILS-  latitude: " + latitude + " longitude:" + longitude + " response" + response);
+        LOG.info("[GET BOARD -  latitude: " + latitude + " longitude:" + longitude + " response" + response);
+
+        return response;
+    }
+
+    @Override
+    public Map<String, Map<String, String>> getEventsByUser(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
+        ObjectMapper mapper = new ObjectMapper();
+
+        String token = body.get("token");
+        Map<String, Map<String, String>> response = new HashMap<>();
+
+        try {
+            String[] subString = token.split("\\.");
+
+            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            String username = payload.getName();
+
+            List<Events> eventsList = eventsDAO.getByUsername(username);
+
+            int i = 0;
+            for (Events event : eventsList) {
+                Map<String, String> map = new HashMap<>();
+                map.put("name", event.getName());
+                map.put("description", event.getDescription());
+                response.put(Integer.toString(i++), map);
+            }
+            LOG.info("[GET EVENTS BY USER - username" + username + " response" + response);
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[GET EVENTS BY USER - error  response - " + response + " e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
 
         return response;
     }

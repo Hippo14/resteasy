@@ -160,4 +160,22 @@ public class EventsDAO {
 
         return board;
     }
+
+    public List<Events> getByUsername(String username) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Events> q = cb.createQuery(Events.class);
+        Root<Events> from = q.from(Events.class);
+        Predicate predicate = cb.equal(from.get(Events_.users.getName()), username);
+
+        q.select(from).where(predicate);
+
+        List<Events> events = new ArrayList<>();
+        try {
+            events = em.createQuery(q).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+
+        return events;
+    }
 }
