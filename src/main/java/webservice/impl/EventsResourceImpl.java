@@ -187,6 +187,8 @@ public class EventsResourceImpl implements EventsResource {
             response.put(Integer.toString(i++), map);
         }
 
+        LOG.info("[GET BOARD DETAILS-  latitude: " + latitude + " longitude:" + longitude + " response" + response);
+
         return response;
     }
 
