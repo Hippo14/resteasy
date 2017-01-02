@@ -5,11 +5,13 @@ import model.Marker;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.Token;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by KMacioszek on 2016-10-12.
@@ -52,5 +54,11 @@ public interface EventsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Events getEventDetails(@Context HttpRequest request);
+
+    @POST
+    @Path("/board")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Map<String, List<String>> getBoard(@Context HttpRequest request);
 
 }

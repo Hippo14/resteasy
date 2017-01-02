@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MSI on 2016-09-25.
@@ -161,6 +162,15 @@ public class EventsResourceImpl implements EventsResource {
         LOG.info("[GET EVENTS DETAILS- " + event + " latitude: " + latitude + " longitude:" + longitude);
 
         return event;
+    }
+
+    @Override
+    public Map<String, List<String>> getBoard(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, Object> bodyMap = (HashMap<String, Object>) request.getAttribute("body");
+        ObjectMapper mapper = new ObjectMapper();
+
+        return null;
     }
 
 }
