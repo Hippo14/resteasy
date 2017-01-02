@@ -59,6 +59,6 @@ public interface EventsResource {
     @Path("/board")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Map<String, List<String>> getBoard(@Context HttpRequest request);
+    Map<String, Map<String, String>> getBoard(@Context HttpRequest request);
 
 }

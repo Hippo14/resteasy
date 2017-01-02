@@ -7,7 +7,10 @@ import model.Marker;
 import javax.ejb.Stateful;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by MSI on 2016-09-25.
@@ -130,5 +133,26 @@ public class EventsDAO {
         }
 
         return events;
+    }
+
+    public List<Events> getTopEvents(double latitude, double longitude, int top) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Events> q = cb.createQuery(Events.class);
+        Root<Events> from = q.from(Events.class);
+        Predicate predicate = cb.and(
+                cb.equal(from.get(Events_.latitude), latitude),
+                cb.equal(from.get(Events_.longitude), longitude)
+        );
+
+        q.select(from).where(predicate);
+
+        List<Events> board = new ArrayList<>();
+        try {
+            board = em.createQuery(q).setMaxResults(top).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+
+        return board;
     }
 }

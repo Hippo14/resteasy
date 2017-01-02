@@ -28,6 +28,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,12 +166,28 @@ public class EventsResourceImpl implements EventsResource {
     }
 
     @Override
-    public Map<String, List<String>> getBoard(@Context HttpRequest request) {
+    public Map<String, Map<String, String>> getBoard(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
-        HashMap<String, Object> bodyMap = (HashMap<String, Object>) request.getAttribute("body");
+        HashMap<String, Object> body = (HashMap<String, Object>) requestMap.get("body");
         ObjectMapper mapper = new ObjectMapper();
 
-        return null;
+        double latitude = Double.parseDouble((String)body.get("latitude"));
+        double longitude = Double.parseDouble((String)body.get("longitude"));
+
+        Map<String, Map<String, String>> response = new HashMap<>();
+
+        List<Events> boardList = eventsDAO.getTopEvents(latitude, longitude, 10);
+
+        int i = 0;
+        for (Events event : boardList) {
+            Map<String, String> map = new HashMap<>();
+            map.put("name", event.getName());
+            map.put("description", event.getDescription());
+            map.put("username", event.getUsers().getName());
+            response.put(Integer.toString(i++), map);
+        }
+
+        return response;
     }
 
 }
