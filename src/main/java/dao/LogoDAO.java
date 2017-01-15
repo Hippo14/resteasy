@@ -49,9 +49,36 @@ public class LogoDAO {
         em.merge(usersLogo);
     }
 
+    public void setLogoForUser(Users users, String image) {
+        UsersLogo usersLogo = new UsersLogo();
+        usersLogo.setUser(users);
+
+        byte[] imageFromB64 = null;
+        try {
+            imageFromB64 = Base64.decode(image.getBytes("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        usersLogo.setImage(imageFromB64);
+
+        em.merge(usersLogo);
+    }
+
     public UsersLogo getLogoForUser(String username) {
         Users users = usersDAO.getByName(username);
 
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersLogo> q = cb.createQuery(UsersLogo.class);
+        Root<UsersLogo> from = q.from(UsersLogo.class);
+        Predicate predicate = cb.equal(from.get(UsersLogo_.user), users);
+
+        q.select(from).where(predicate);
+
+        return em.createQuery(q).getSingleResult();
+    }
+
+    public UsersLogo getLogoForUser(Users users) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<UsersLogo> q = cb.createQuery(UsersLogo.class);
         Root<UsersLogo> from = q.from(UsersLogo.class);

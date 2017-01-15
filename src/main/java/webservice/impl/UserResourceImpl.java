@@ -82,7 +82,7 @@ public class UserResourceImpl implements UserResource {
             e.printStackTrace();
         }
 
-        logoDAO.setLogoForUser(newUser.getName(), new String(imageByte));
+        logoDAO.setLogoForUser(newUser, new String(imageByte));
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 
