@@ -85,7 +85,7 @@ public class UserResourceImpl implements UserResource {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         OutputStream b64 = new Base64OutputStream(os);
         try {
-            ImageIO.write(image, "jpeg", b64);
+            ImageIO.write(image, "png", b64);
             logoDAO.setLogoForUser(newUser, os.toString("UTF-8"));
         } catch (IOException e) {
             e.printStackTrace();
