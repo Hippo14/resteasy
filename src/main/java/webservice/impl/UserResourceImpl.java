@@ -5,6 +5,7 @@ import config.ErrorConfig;
 import dao.UsersDAO;
 import model.Users;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import secure.RSA;
@@ -15,12 +16,15 @@ import webservice.UserResource;
 import webservice.credentials.EmailPassCred;
 
 import javax.ejb.EJB;
+import javax.imageio.ImageIO;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +91,37 @@ public class UserResourceImpl implements UserResource {
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER BY TOKEN - error  response - " + response + " e - " + e.getMessage());
 
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
+    @Override
+    public Map<String, String> getUserLogo(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+
+        String token = (String) requestMap.get("token");
+        Map<String, String> response = new HashMap<>();
+
+        LOG.info("[GET USER LOGO - " + " | requestMap - " + requestMap + "]");
+
+        BufferedImage image = null;
+
+        InputStream input = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
+
+        try {
+            image = ImageIO.read(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        OutputStream b64 = new Base64OutputStream(os);
+        try {
+            ImageIO.write(image, "png", b64);
+            response.put("image", os.toString("UTF-8"));
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
