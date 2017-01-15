@@ -73,16 +73,24 @@ public class UserResourceImpl implements UserResource {
         // Add new user
         String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
         // Add default profile image
-        InputStream image = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
-        byte[] imageByte = new byte[0];
+        InputStream input = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
+        BufferedImage image = null;
+
         try {
-            imageByte = new byte[image.available()];
-            image.read(imageByte);
+            image = ImageIO.read(input);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        logoDAO.setLogoForUser(newUser, new String(imageByte));
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        OutputStream b64 = new Base64OutputStream(os);
+        try {
+            ImageIO.write(image, "jpeg", b64);
+            logoDAO.setLogoForUser(newUser, os.toString("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 
