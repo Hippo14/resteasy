@@ -1,11 +1,15 @@
 package webservice;
 
 import model.Users;
+import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.EmailPassCred;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
+
 /**
  * Created by MSI on 2016-10-09.
  */
@@ -32,4 +36,10 @@ public interface UsersResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewUser(Users newUser);
+
+    @GET
+    @Path("/getUserByToken")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Map<String, Users> getUserByToken(@Context HttpRequest request);
 }

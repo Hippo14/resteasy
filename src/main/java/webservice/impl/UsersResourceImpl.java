@@ -1,32 +1,29 @@
 package webservice.impl;
 
+import auth.parts.Payload;
 import config.ErrorConfig;
 import dao.UsersDAO;
 import model.Users;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
+import org.jboss.resteasy.spi.HttpRequest;
 import secure.RSA;
 import utils.MD5Utils;
 import utils.ObjectToJsonUtils;
+import webservice.AuthFilter;
 import webservice.UsersResource;
 import webservice.credentials.EmailPassCred;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MSI on 2016-10-09.
@@ -66,6 +63,32 @@ public class UsersResourceImpl implements UsersResource {
         // Add new user
         String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+    }
+
+    @Override
+    @AuthFilter
+    public Map<String, Users> getUserByToken(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+
+        String token = (String) requestMap.get("token");
+        Map<String, Users> response = new HashMap<>();
+
+        try {
+            String[] subString = token.split("\\.");
+
+            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            String username = payload.getName();
+
+            Users user = usersDAO.getByName(username);
+
+            response.put("user", user);
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[GET EVENTS BY USER - error  response - " + response + " e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+        return response;
     }
 
     private String decryptPassword(String password) {
