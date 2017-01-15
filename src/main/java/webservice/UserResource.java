@@ -51,4 +51,11 @@ public interface UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, String> getUserLogo(@Context HttpRequest request);
 
+    @POST
+    @AuthFilter
+    @Path("/setUserLogo")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Boolean setUserLogo(@Context HttpRequest request);
+
 }

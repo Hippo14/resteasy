@@ -2,10 +2,14 @@ package webservice.impl;
 
 import auth.parts.Payload;
 import config.ErrorConfig;
+import dao.LogoDAO;
 import dao.UsersDAO;
 import model.Users;
+import model.UsersLogo;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Base64OutputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import secure.RSA;
@@ -24,7 +28,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +42,9 @@ public class UserResourceImpl implements UserResource {
 
     @EJB
     UsersDAO usersDAO;
+
+    @EJB
+    LogoDAO logoDAO;
 
     @Override
     public Response getByName(String name) {
@@ -66,6 +72,16 @@ public class UserResourceImpl implements UserResource {
 
         // Add new user
         String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
+        // Add default profile image
+        InputStream image = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
+        byte[] imageByte = new byte[0];
+        try {
+            imageByte = IOUtils.toByteArray(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        logoDAO.setLogoForUser(newUser.getName(), new String(imageByte));
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
 
@@ -100,32 +116,55 @@ public class UserResourceImpl implements UserResource {
     @Override
     public Map<String, String> getUserLogo(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
 
         String token = (String) requestMap.get("token");
         Map<String, String> response = new HashMap<>();
 
         LOG.info("[GET USER LOGO - " + " | requestMap - " + requestMap + "]");
 
-        BufferedImage image = null;
-
-        InputStream input = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
-
         try {
-            image = ImageIO.read(input);
-        } catch (IOException e) {
+            String[] subString = token.split("\\.");
+
+            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            String username = payload.getName();
+
+            UsersLogo usersLogo = logoDAO.getLogoForUser(username);
+            byte[] imageB64 = Base64.encodeBase64(usersLogo.getImage());
+
+            response.put("image", new String(imageB64));
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[SET USER LOGO - error  e - " + e.getMessage());
+
             e.printStackTrace();
         }
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        OutputStream b64 = new Base64OutputStream(os);
-        try {
-            ImageIO.write(image, "png", b64);
-            response.put("image", os.toString("UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         return response;
+    }
+
+    @Override
+    public Boolean setUserLogo(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
+
+        String token = (String) requestMap.get("token");
+        String image = body.get("image");
+
+        try {
+            String[] subString = token.split("\\.");
+
+            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            String username = payload.getName();
+
+            logoDAO.setLogoForUser(username, image);
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[SET USER LOGO - error  e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     private String decryptPassword(String password) {
