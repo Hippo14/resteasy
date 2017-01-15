@@ -33,8 +33,8 @@ public class LogoDAO {
 
     public void setLogoForUser(String username, String image) {
         Users users = usersDAO.getByName(username);
-        //UsersLogo usersLogo = getLogoForUser(username);
-        UsersLogo usersLogo = new UsersLogo();
+        UsersLogo usersLogo = getLogoForUser(username);
+        //UsersLogo usersLogo = new UsersLogo();
         usersLogo.setUser(users);
 
         byte[] imageFromB64 = null;
@@ -46,7 +46,7 @@ public class LogoDAO {
 
         usersLogo.setImage(imageFromB64);
 
-        em.persist(usersLogo);
+        em.merge(usersLogo);
     }
 
     public UsersLogo getLogoForUser(String username) {
