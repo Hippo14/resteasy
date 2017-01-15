@@ -76,7 +76,8 @@ public class UserResourceImpl implements UserResource {
         InputStream image = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
         byte[] imageByte = new byte[0];
         try {
-            imageByte = IOUtils.toByteArray(image);
+            imageByte = new byte[image.available()];
+            image.read(imageByte);
         } catch (IOException e) {
             e.printStackTrace();
         }
