@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public interface UsersResource {
+public interface UserResource {
 
     @GET
     @Path("/get/{name}")
@@ -37,7 +37,8 @@ public interface UsersResource {
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewUser(Users newUser);
 
-    @GET
+    @POST
+    @AuthFilter
     @Path("/getUserByToken")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

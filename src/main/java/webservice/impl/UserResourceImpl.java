@@ -11,7 +11,7 @@ import secure.RSA;
 import utils.MD5Utils;
 import utils.ObjectToJsonUtils;
 import webservice.AuthFilter;
-import webservice.UsersResource;
+import webservice.UserResource;
 import webservice.credentials.EmailPassCred;
 
 import javax.ejb.EJB;
@@ -29,9 +29,9 @@ import java.util.Map;
  * Created by MSI on 2016-10-09.
  */
 @Path("user")
-public class UsersResourceImpl implements UsersResource {
+public class UserResourceImpl implements UserResource {
 
-    final static Logger LOG = Logger.getLogger(UsersResourceImpl.class);
+    final static Logger LOG = Logger.getLogger(UserResourceImpl.class);
 
     @EJB
     UsersDAO usersDAO;
@@ -73,6 +73,8 @@ public class UsersResourceImpl implements UsersResource {
         String token = (String) requestMap.get("token");
         Map<String, Users> response = new HashMap<>();
 
+        LOG.info("[GET USER BY TOKEN - " + " | requestMap - " + requestMap + "]");
+
         try {
             String[] subString = token.split("\\.");
 
@@ -83,7 +85,7 @@ public class UsersResourceImpl implements UsersResource {
 
             response.put("user", user);
         } catch (UnsupportedEncodingException e) {
-            LOG.info("[GET EVENTS BY USER - error  response - " + response + " e - " + e.getMessage());
+            LOG.info("[GET USER BY TOKEN - error  response - " + response + " e - " + e.getMessage());
 
             e.printStackTrace();
         }

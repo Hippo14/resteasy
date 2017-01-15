@@ -1,21 +1,10 @@
 package dao;
 
-import auth.Token;
-import auth.parts.Header;
-import auth.parts.Payload;
 import config.ErrorConfig;
-import model.UsersKeys;
 import model.Users;
 import model.Users_;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import utils.HibernateUtil;
-import webservice.impl.UsersResourceImpl;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
@@ -27,10 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by MSI on 2016-10-09.
