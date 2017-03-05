@@ -116,18 +116,17 @@ public class EventsResourceImpl implements EventsResource {
         HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");
         ObjectMapper mapper = new ObjectMapper();
 
-        String cityName = (String) body.get("cityName");
         double latitude = (double) body.get("latitude");
         double longitude = (double) body.get("longitude");
 
-        List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude);
+        List<Events> eventsList = eventsDAO.getByLocation("", latitude, longitude);
 
         StringBuilder eventString = new StringBuilder("");
         for (Events event : eventsList) {
             eventString.append(event.getName() + " " + event.getId() + "\n");
         }
 
-        LOG.info("[GET EVENTS - " + eventString.toString() + " latitude: " + latitude + " longitude:" + longitude + " cityName" + cityName);
+        LOG.info("[GET EVENTS - " + eventString.toString() + " latitude: " + latitude + " longitude:" + longitude + " cityName: " + "");
 
         return eventsList;
     }
