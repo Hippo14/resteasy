@@ -66,4 +66,10 @@ public interface EventsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, Map<String, String>> getEventsByUser(@Context HttpRequest request);
+
+    @POST
+    @Path("/getUserListEvent")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Map<String, Map<String, String>> getUserListEvent(@Context HttpRequest request);
 }

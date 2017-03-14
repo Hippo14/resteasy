@@ -228,4 +228,24 @@ public class EventsResourceImpl implements EventsResource {
         return response;
     }
 
+    @Override
+    public Map<String, Map<String, String>> getUserListEvent(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
+
+        Double latitude = Double.parseDouble(body.get("latitude"));
+        Double longitude = Double.parseDouble(body.get("longitude"));
+
+        List<String> userList = eventsDAO.getUserListEvent(latitude, longitude);
+
+        Map<String, Map<String, String>> response = new HashMap<>();
+        for (String elem : userList) {
+            Map<String, String> map = new HashMap<>();
+
+            map.put("user", elem);
+        }
+
+        return response;
+    }
+
 }

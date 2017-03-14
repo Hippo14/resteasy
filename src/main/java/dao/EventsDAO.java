@@ -1,9 +1,6 @@
 package dao;
 
-import model.Events;
-import model.Events_;
-import model.Marker;
-import model.Users;
+import model.*;
 
 import javax.ejb.Stateful;
 import javax.persistence.*;
@@ -179,5 +176,35 @@ public class EventsDAO {
         }
 
         return events;
+    }
+
+    public List<String> getUserListEvent(Double latitude, Double longitude) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersEvents> q = cb.createQuery(UsersEvents.class);
+        Root<UsersEvents> from = q.from(UsersEvents.class);
+
+        Path<Double> latitudeDb = from.get("latitude");
+        Path<Double> longitudeDb = from.get("longitude");
+        Predicate predicate = cb.and(
+                cb.equal(latitudeDb, latitude),
+                cb.equal(longitudeDb, longitude)
+        );
+
+        q.select(from).where(predicate);
+
+        List<UsersEvents> usersEvents = null;
+        try {
+            usersEvents = em.createQuery(q).getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+
+        List<String> result = null;
+
+        for (UsersEvents user : usersEvents) {
+            result.add(user.getUsers().getName());
+        }
+
+        return result;
     }
 }
