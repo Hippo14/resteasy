@@ -179,27 +179,23 @@ public class EventsDAO {
     }
 
     public List<String> getUserListEvent(Double latitude, Double longitude) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<UsersEvents> q = cb.createQuery(UsersEvents.class);
-        Root<UsersEvents> from = q.from(UsersEvents.class);
+        Events event = getByLocation(latitude, longitude);
 
-        Path<Double> latitudeDb = from.get("latitude");
-        Path<Double> longitudeDb = from.get("longitude");
-        Predicate predicate = cb.and(
-                cb.equal(latitudeDb, latitude),
-                cb.equal(longitudeDb, longitude)
-        );
+        CriteriaBuilder cb1 = em.getCriteriaBuilder();
+        CriteriaQuery<UsersEvents> q1 = cb1.createQuery(UsersEvents.class);
+        Root<UsersEvents> from1 = q1.from(UsersEvents.class);
 
-        q.select(from).where(predicate);
+        Predicate predicate1 = cb1.equal(from1.get(UsersEvents_.events), event);
+        q1.select(from1).where(predicate1);
 
-        List<UsersEvents> usersEvents = null;
+        List<UsersEvents> usersEvents;
         try {
-            usersEvents = em.createQuery(q).getResultList();
+            usersEvents = em.createQuery(q1).getResultList();
         } catch (NoResultException e) {
-            return null;
+            usersEvents = new ArrayList<>();
         }
 
-        List<String> result = null;
+        List<String> result = new ArrayList<>();
 
         for (UsersEvents user : usersEvents) {
             result.add(user.getUsers().getName());
