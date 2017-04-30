@@ -32,8 +32,6 @@ public class UsersDAO {
 
     @EJB
     TokensDAO tokensDAO;
-    @EJB
-    LogoDAO logoDAO;
 
     final static Logger LOG = Logger.getLogger(UsersDAO.class);
 
@@ -102,15 +100,4 @@ public class UsersDAO {
         return (user != null);
     }
 
-    public String getUserLogo(String token) throws UnsupportedEncodingException {
-        String[] subString = token.split("\\.");
-
-        Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-        String username = payload.getName();
-
-        UsersLogo usersLogo = logoDAO.getLogoForUser(username);
-        byte[] imageB64 = Base64.encodeBase64(usersLogo.getImage());
-
-        return new String(imageB64);
-    }
 }

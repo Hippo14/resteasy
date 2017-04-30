@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import secure.RSA;
+import utils.LogoUtils;
 import utils.MD5Utils;
 import utils.ObjectToJsonUtils;
 import webservice.AuthFilter;
@@ -45,6 +46,9 @@ public class UserResourceImpl implements UserResource {
 
     @EJB
     LogoDAO logoDAO;
+
+    @EJB
+    LogoUtils logoUtils;
 
     @Override
     public Response getByName(String name) {
@@ -133,7 +137,7 @@ public class UserResourceImpl implements UserResource {
         LOG.info("[GET USER LOGO - " + " | requestMap - " + requestMap + "]");
 
         try {
-            response.put("image", usersDAO.getUserLogo(token));
+            response.put("image", logoUtils.get(token));
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
             e.printStackTrace();

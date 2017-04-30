@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
+import utils.LogoUtils;
 import utils.ObjectToJsonUtils;
 import webservice.AuthFilter;
 import webservice.EventsResource;
@@ -44,6 +45,8 @@ public class EventsResourceImpl implements EventsResource {
     TokensDAO tokensDAO;
     @EJB
     UsersDAO usersDAO;
+    @EJB
+    LogoUtils logoUtils;
 
     final static Logger LOG = Logger.getLogger(EventsResourceImpl.class);
 
@@ -182,7 +185,7 @@ public class EventsResourceImpl implements EventsResource {
             map.put("description", event.getDescription());
             map.put("username", event.getUsers().getName());
             try {
-                map.put("image", usersDAO.getUserLogo(token));
+                map.put("image", logoUtils.get(token));
             } catch (UnsupportedEncodingException e) {
                 LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
                 e.printStackTrace();
