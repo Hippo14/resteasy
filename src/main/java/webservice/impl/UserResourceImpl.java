@@ -133,21 +133,11 @@ public class UserResourceImpl implements UserResource {
         LOG.info("[GET USER LOGO - " + " | requestMap - " + requestMap + "]");
 
         try {
-            String[] subString = token.split("\\.");
-
-            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            String username = payload.getName();
-
-            UsersLogo usersLogo = logoDAO.getLogoForUser(username);
-            byte[] imageB64 = Base64.encodeBase64(usersLogo.getImage());
-
-            response.put("image", new String(imageB64));
+            response.put("image", usersDAO.getUserLogo(token));
         } catch (UnsupportedEncodingException e) {
-            LOG.info("[SET USER LOGO - error  e - " + e.getMessage());
-
+            LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
             e.printStackTrace();
         }
-
 
         return response;
     }

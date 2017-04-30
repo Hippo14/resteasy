@@ -1,8 +1,11 @@
 package dao;
 
+import auth.parts.Payload;
 import config.ErrorConfig;
 import model.Users;
+import model.UsersLogo;
 import model.Users_;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
@@ -16,6 +19,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by MSI on 2016-10-09.
@@ -28,6 +32,8 @@ public class UsersDAO {
 
     @EJB
     TokensDAO tokensDAO;
+    @EJB
+    LogoDAO logoDAO;
 
     final static Logger LOG = Logger.getLogger(UsersDAO.class);
 
@@ -94,5 +100,17 @@ public class UsersDAO {
         }
 
         return (user != null);
+    }
+
+    public String getUserLogo(String token) throws UnsupportedEncodingException {
+        String[] subString = token.split("\\.");
+
+        Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+        String username = payload.getName();
+
+        UsersLogo usersLogo = logoDAO.getLogoForUser(username);
+        byte[] imageB64 = Base64.encodeBase64(usersLogo.getImage());
+
+        return new String(imageB64);
     }
 }

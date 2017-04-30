@@ -19,10 +19,7 @@ import webservice.credentials.Token;
 
 import javax.ejb.EJB;
 import javax.enterprise.event.Event;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -170,6 +167,8 @@ public class EventsResourceImpl implements EventsResource {
         HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
         ObjectMapper mapper = new ObjectMapper();
 
+        String token = (String) requestMap.get("token");
+
         double latitude = Double.parseDouble(body.get("latitude"));
         double longitude = Double.parseDouble(body.get("longitude"));
 
@@ -182,6 +181,12 @@ public class EventsResourceImpl implements EventsResource {
             map.put("name", event.getName());
             map.put("description", event.getDescription());
             map.put("username", event.getUsers().getName());
+            try {
+                map.put("image", usersDAO.getUserLogo(token));
+            } catch (UnsupportedEncodingException e) {
+                LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
+                e.printStackTrace();
+            }
             response.put(Integer.toString(i++), map);
         }
 
