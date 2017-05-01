@@ -2,7 +2,7 @@ package dao;
 
 import model.Category;
 
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by MSI on 2017-05-01.
  */
-@SessionScoped
+@Stateful
 public class CategoryDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

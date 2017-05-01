@@ -2,7 +2,7 @@ package dao;
 
 import model.*;
 
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Stateful;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by MSI on 2016-09-25.
  */
-@SessionScoped
+@Stateful
 public class EventsDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

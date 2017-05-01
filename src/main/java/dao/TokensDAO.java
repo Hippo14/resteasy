@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Stateful;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,7 +27,7 @@ import java.util.Date;
 /**
  * Created by KMacioszek on 2016-10-18.
  */
-@SessionScoped
+@Stateful
 public class TokensDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

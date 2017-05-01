@@ -6,7 +6,7 @@ import model.Users_;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -21,7 +21,7 @@ import java.io.Serializable;
 /**
  * Created by MSI on 2016-10-09.
  */
-@SessionScoped
+@Stateful
 public class UsersDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
