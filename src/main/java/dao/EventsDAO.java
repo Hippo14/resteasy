@@ -2,19 +2,18 @@ package dao;
 
 import model.*;
 
-import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by MSI on 2016-09-25.
  */
-@Stateful
-public class EventsDAO {
+@SessionScoped
+public class EventsDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

@@ -3,24 +3,22 @@ package dao;
 import auth.Token;
 import auth.parts.Header;
 import auth.parts.Payload;
-import auth.parts.Signature;
 import config.ErrorConfig;
 import model.Users;
 import model.UsersKeys;
 import model.UsersKeys_;
-import model.Users_;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
@@ -29,8 +27,8 @@ import java.util.Date;
 /**
  * Created by KMacioszek on 2016-10-18.
  */
-@Stateful
-public class TokensDAO {
+@SessionScoped
+public class TokensDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

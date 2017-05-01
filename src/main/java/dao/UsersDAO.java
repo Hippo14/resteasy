@@ -1,15 +1,12 @@
 package dao;
 
-import auth.parts.Payload;
 import config.ErrorConfig;
 import model.Users;
-import model.UsersLogo;
 import model.Users_;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -19,13 +16,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
-import java.io.UnsupportedEncodingException;
+import java.io.Serializable;
 
 /**
  * Created by MSI on 2016-10-09.
  */
-@Stateful
-public class UsersDAO {
+@SessionScoped
+public class UsersDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

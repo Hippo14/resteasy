@@ -6,14 +6,15 @@ import model.UsersLogo;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 /**
  * Created by MSI on 2017-04-30.
  */
-@Stateful
-public class LogoUtils {
+@SessionScoped
+public class LogoUtils implements Serializable {
 
     @EJB
     LogoDAO logoDAO;

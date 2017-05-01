@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.jboss.resteasy.util.Base64;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -16,12 +16,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by MSI on 2017-01-15.
  */
-@Stateful
-public class LogoDAO {
+@SessionScoped
+public class LogoDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

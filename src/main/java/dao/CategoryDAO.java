@@ -1,10 +1,8 @@
 package dao;
 
 import model.Category;
-import model.Events;
 
-import javax.ejb.Stateful;
-import javax.ejb.StatefulTimeout;
+import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -12,14 +10,14 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2017-05-01.
  */
-@Stateful
-public class CategoryDAO {
+@SessionScoped
+public class CategoryDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;
