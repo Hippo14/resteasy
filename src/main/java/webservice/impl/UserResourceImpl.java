@@ -49,9 +49,6 @@ public class UserResourceImpl implements UserResource, Serializable {
 
     final static Logger LOG = Logger.getLogger(UserResourceImpl.class);
 
-    @Resource
-    SessionContext sessionContext;
-
     @EJB
     UsersDAO usersDAO;
 
