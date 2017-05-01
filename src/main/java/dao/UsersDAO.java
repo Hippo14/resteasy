@@ -6,6 +6,7 @@ import model.Users_;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,7 +23,7 @@ import java.util.UUID;
 /**
  * Created by MSI on 2016-10-09.
  */
-@SessionScoped
+@Stateful
 public class UsersDAO implements Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();
