@@ -3,6 +3,7 @@ package dao;
 import model.Category;
 
 import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -12,11 +13,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2017-05-01.
  */
 @Stateful
+@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class CategoryDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

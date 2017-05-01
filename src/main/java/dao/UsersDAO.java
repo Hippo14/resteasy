@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -17,11 +18,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2016-10-09.
  */
 @Stateful
+@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class UsersDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

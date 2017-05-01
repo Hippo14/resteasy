@@ -7,13 +7,16 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2017-04-30.
  */
 @Stateful
+@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class LogoUtils implements Serializable {
 
     @EJB

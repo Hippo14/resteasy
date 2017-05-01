@@ -3,16 +3,19 @@ package dao;
 import model.*;
 
 import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2016-09-25.
  */
 @Stateful
+@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class EventsDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

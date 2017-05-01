@@ -8,6 +8,7 @@ import org.jboss.resteasy.util.Base64;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.StatefulTimeout;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -17,11 +18,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2017-01-15.
  */
 @Stateful
+@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class LogoDAO implements Serializable {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
