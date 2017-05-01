@@ -20,7 +20,9 @@ import webservice.AuthFilter;
 import webservice.UserResource;
 import webservice.credentials.EmailPassCred;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.SessionContext;
 import javax.enterprise.context.SessionScoped;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Path;
@@ -33,6 +35,7 @@ import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by MSI on 2016-10-09.
@@ -41,7 +44,12 @@ import java.util.Map;
 @SessionScoped
 public class UserResourceImpl implements UserResource, Serializable {
 
+    private UUID uuid = java.util.UUID.randomUUID();
+
     final static Logger LOG = Logger.getLogger(UserResourceImpl.class);
+
+    @Resource
+    SessionContext sessionContext;
 
     @EJB
     UsersDAO usersDAO;
@@ -72,6 +80,15 @@ public class UserResourceImpl implements UserResource, Serializable {
     @Override
     public Response registerNewUser(Users newUser) {
         LOG.info("[NEW USER EVENT - "+ " | name: " + newUser.getName() + " | email: " + newUser.getEmail() + " | password: " + newUser.getPassword() + " ]");
+
+
+        //TEST
+
+
+
+        //TEST
+
+
 
         String decryptedPassword = decryptPassword(newUser.getPassword());
         newUser.setPassword(decryptedPassword);

@@ -13,14 +13,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2017-05-01.
  */
 @Stateful
-@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class CategoryDAO implements Serializable {
+
+    private UUID uuid = java.util.UUID.randomUUID();
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

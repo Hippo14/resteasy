@@ -18,14 +18,16 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.WebApplicationException;
 import java.io.Serializable;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2016-10-09.
  */
 @Stateful
-@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class UsersDAO implements Serializable {
+
+    private UUID uuid = java.util.UUID.randomUUID();
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

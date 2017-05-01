@@ -10,14 +10,16 @@ import javax.ejb.Stateful;
 import javax.ejb.StatefulTimeout;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2017-04-30.
  */
 @Stateful
-@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class LogoUtils implements Serializable {
+
+    private UUID uuid = java.util.UUID.randomUUID();
 
     @EJB
     LogoDAO logoDAO;

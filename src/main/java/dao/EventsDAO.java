@@ -9,14 +9,16 @@ import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MSI on 2016-09-25.
  */
 @Stateful
-@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class EventsDAO implements Serializable {
+
+    private UUID uuid = java.util.UUID.randomUUID();
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;

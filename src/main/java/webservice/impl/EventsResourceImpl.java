@@ -18,7 +18,9 @@ import webservice.AuthFilter;
 import webservice.EventsResource;
 import webservice.credentials.Token;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.SessionContext;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.jws.WebService;
@@ -29,10 +31,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MSI on 2016-09-25.
@@ -42,7 +41,9 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @SessionScoped
 public class EventsResourceImpl implements EventsResource, Serializable {
-    
+
+    private UUID uuid = java.util.UUID.randomUUID();
+
     @EJB
     EventsDAO eventsDAO;
     @EJB

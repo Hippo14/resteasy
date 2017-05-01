@@ -24,14 +24,16 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by KMacioszek on 2016-10-18.
  */
 @Stateful
-@StatefulTimeout(value = 30, unit = TimeUnit.SECONDS)
 public class TokensDAO implements Serializable {
+
+    private UUID uuid = java.util.UUID.randomUUID();
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;
