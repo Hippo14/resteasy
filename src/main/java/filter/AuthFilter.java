@@ -17,6 +17,7 @@ import utils.ObjectToJsonUtils;
 import webservice.credentials.Token;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.*;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Provider
 @webservice.AuthFilter
-@SessionScoped
+@RequestScoped
 public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilter, Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();
