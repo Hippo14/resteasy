@@ -6,15 +6,12 @@ import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.AuthFilter;
 import webservice.CategoryResource;
-import webservice.credentials.Token;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**

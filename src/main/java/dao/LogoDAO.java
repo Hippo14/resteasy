@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.jboss.resteasy.util.Base64;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * Created by MSI on 2017-01-15.
  */
-@Stateful
+@Stateless
 public class LogoDAO {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
