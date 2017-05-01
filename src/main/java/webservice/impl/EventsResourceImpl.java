@@ -21,6 +21,7 @@ import webservice.credentials.Token;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.jws.WebService;
@@ -39,7 +40,7 @@ import java.util.*;
 @Path("/events")
 @AuthFilter
 @Produces(MediaType.APPLICATION_JSON)
-@SessionScoped
+@RequestScoped
 public class EventsResourceImpl implements EventsResource, Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();

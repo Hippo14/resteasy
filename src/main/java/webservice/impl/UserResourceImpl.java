@@ -23,6 +23,7 @@ import webservice.credentials.EmailPassCred;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Path;
@@ -41,7 +42,7 @@ import java.util.UUID;
  * Created by MSI on 2016-10-09.
  */
 @Path("user")
-@SessionScoped
+@RequestScoped
 public class UserResourceImpl implements UserResource, Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();
