@@ -17,6 +17,7 @@ import utils.ObjectToJsonUtils;
 import webservice.credentials.Token;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.*;
 import javax.ws.rs.core.MultivaluedMap;
@@ -26,6 +27,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +35,10 @@ import java.util.stream.Collectors;
  */
 @Provider
 @webservice.AuthFilter
-public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilter {
+@SessionScoped
+public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilter, Serializable {
+
+    private UUID uuid = java.util.UUID.randomUUID();
 
     @EJB
     TokensDAO tokensDAO;
