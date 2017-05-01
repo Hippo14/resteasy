@@ -2,6 +2,8 @@ package webservice.impl;
 
 import dao.CategoryDAO;
 import model.Category;
+import org.apache.log4j.Logger;
+import org.jboss.resteasy.spi.HttpRequest;
 import webservice.AuthFilter;
 import webservice.CategoryResource;
 import webservice.credentials.Token;
@@ -9,6 +11,7 @@ import webservice.credentials.Token;
 import javax.ejb.EJB;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -25,14 +28,13 @@ public class CategoryResourceImpl implements CategoryResource {
     @EJB
     CategoryDAO categoryDAO;
 
-    @Override
-    public Response getAll(Token token) {
-        List<Category> categoryList = categoryDAO.getAll();
-        if (categoryList == null)
-            return Response.serverError().build();
+    final static Logger LOG = Logger.getLogger(CategoryResourceImpl.class);
 
-        GenericEntity<List<Category>> ge = new GenericEntity<List<Category>>(categoryList) {};
-        return Response.ok(ge).build();
+    @Override
+    public List<Category> getAll(@Context HttpRequest request) {
+        List<Category> categoryList = categoryDAO.getAll();
+
+        return categoryList;
     }
 
 }
