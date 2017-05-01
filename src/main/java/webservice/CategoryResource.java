@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
  * Created by MSI on 2017-05-01.
  */
 @Produces(MediaType.APPLICATION_JSON)
+@AuthFilter
 public interface CategoryResource {
 
     @POST
