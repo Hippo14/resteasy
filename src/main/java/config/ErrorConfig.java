@@ -8,5 +8,5 @@ public class ErrorConfig {
     public static final String BAD_PASSWORD = "Bad password";
     public static final String UNEXCEPTED_ERROR = "Unexcepted error!";
     public static final String USER_EXISTS = "User exists!";
-
+    public static final String USER_EXISTS_IN_EVENT = "Event added to favourite!";
 }

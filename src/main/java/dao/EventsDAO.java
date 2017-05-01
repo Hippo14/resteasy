@@ -207,4 +207,30 @@ public class EventsDAO implements Serializable {
 
         return result;
     }
+
+    public Users addUserToEvent(Users user, Double latitude, Double longitude) {
+        Events event = getByLocation(latitude, longitude);
+        UsersEvents usersEvents = getUsersEvent(user, latitude, longitude, event);
+        if (usersEvents != null) {
+            // Błąd nic nie rób!!!
+        }
+        usersEvents = new UsersEvents(user, event);
+        em.persist(usersEvents);
+
+        return user;
+    }
+
+    private UsersEvents getUsersEvent(Users user, Double latitude, Double longitude, Events event) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UsersEvents> q = cb.createQuery(UsersEvents.class);
+        Root<UsersEvents> from = q.from(UsersEvents.class);
+        Predicate predicate = cb.and(
+                cb.equal(from.get(UsersEvents_.events), event),
+                cb.equal(from.get(UsersEvents_.users), user)
+        );
+
+        q.select(from).where(predicate);
+
+        return em.createQuery(q).getSingleResult();
+    }
 }

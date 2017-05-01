@@ -79,15 +79,6 @@ public class UserResourceImpl implements UserResource, Serializable {
     public Response registerNewUser(Users newUser) {
         LOG.info("[NEW USER EVENT - "+ " | name: " + newUser.getName() + " | email: " + newUser.getEmail() + " | password: " + newUser.getPassword() + " ]");
 
-
-        //TEST
-
-
-
-        //TEST
-
-
-
         String decryptedPassword = decryptPassword(newUser.getPassword());
         newUser.setPassword(decryptedPassword);
 

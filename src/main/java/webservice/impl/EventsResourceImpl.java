@@ -1,6 +1,7 @@
 package webservice.impl;
 
 import auth.parts.Payload;
+import config.ErrorConfig;
 import dao.EventsDAO;
 import dao.TokensDAO;
 import dao.UsersDAO;
@@ -8,7 +9,6 @@ import model.Events;
 import model.Marker;
 import model.Users;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
@@ -18,13 +18,8 @@ import webservice.AuthFilter;
 import webservice.EventsResource;
 import webservice.credentials.Token;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.SessionContext;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.event.Event;
-import javax.jws.WebService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
@@ -260,6 +255,41 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         }
 
         return response;
+    }
+
+    @Override
+    public Response addUserToEvent(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
+        Map<String, String> response = new HashMap<>();
+
+        String token = (String) requestMap.get("token");
+
+        Double latitude = Double.parseDouble(body.get("latitude"));
+        Double longitude = Double.parseDouble(body.get("longitude"));
+        Users user = null;
+
+        try {
+            String[] subString = token.split("\\.");
+
+            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            String username = payload.getName();
+
+            user = usersDAO.getByName(username);
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+        user = eventsDAO.addUserToEvent(user, latitude, longitude);
+
+        if (user == null) {
+            throw new WebApplicationException(ErrorConfig.USER_EXISTS_IN_EVENT);
+        }
+
+
+        return Response.ok().build();
     }
 
 }

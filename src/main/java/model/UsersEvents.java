@@ -20,6 +20,14 @@ public class UsersEvents implements Serializable {
     @JoinColumn(name="userID")
     Users users;
 
+    public UsersEvents(Users user, Events event) {
+        this.users = user;
+        this.events = event;
+    }
+
+    public UsersEvents() {
+    }
+
     public Events getEvents() {
         return events;
     }

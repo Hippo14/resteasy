@@ -5,7 +5,6 @@ import model.Marker;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.Token;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -72,4 +71,11 @@ public interface EventsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, Map<String, String>> getUserListEvent(@Context HttpRequest request);
+
+    @POST
+    @Path("/addToEvent")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response addUserToEvent(@Context HttpRequest request);
+
 }
