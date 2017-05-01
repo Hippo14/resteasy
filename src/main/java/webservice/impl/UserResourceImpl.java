@@ -21,6 +21,7 @@ import webservice.UserResource;
 import webservice.credentials.EmailPassCred;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
@@ -37,7 +38,8 @@ import java.util.Map;
  * Created by MSI on 2016-10-09.
  */
 @Path("user")
-public class UserResourceImpl implements UserResource {
+@SessionScoped
+public class UserResourceImpl implements UserResource, Serializable {
 
     final static Logger LOG = Logger.getLogger(UserResourceImpl.class);
 

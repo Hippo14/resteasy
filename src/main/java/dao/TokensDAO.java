@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -29,7 +29,7 @@ import java.util.Date;
 /**
  * Created by KMacioszek on 2016-10-18.
  */
-@Stateless
+@Stateful
 public class TokensDAO {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

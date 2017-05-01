@@ -2,7 +2,7 @@ package dao;
 
 import model.*;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by MSI on 2016-09-25.
  */
-@Stateless
+@Stateful
 public class EventsDAO {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

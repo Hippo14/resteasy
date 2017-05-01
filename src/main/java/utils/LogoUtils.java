@@ -6,13 +6,13 @@ import model.UsersLogo;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import java.io.UnsupportedEncodingException;
 
 /**
  * Created by MSI on 2017-04-30.
  */
-@Stateless
+@Stateful
 public class LogoUtils {
 
     @EJB

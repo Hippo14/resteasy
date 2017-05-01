@@ -19,12 +19,14 @@ import webservice.EventsResource;
 import webservice.credentials.Token;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +39,8 @@ import java.util.Map;
 @Path("/events")
 @AuthFilter
 @Produces(MediaType.APPLICATION_JSON)
-public class EventsResourceImpl implements EventsResource {
+@SessionScoped
+public class EventsResourceImpl implements EventsResource, Serializable {
     
     @EJB
     EventsDAO eventsDAO;

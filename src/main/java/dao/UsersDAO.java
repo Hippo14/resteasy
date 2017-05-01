@@ -9,7 +9,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -24,7 +24,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by MSI on 2016-10-09.
  */
-@Stateless
+@Stateful
 public class UsersDAO {
 
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)

@@ -8,10 +8,12 @@ import webservice.AuthFilter;
 import webservice.CategoryResource;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -20,7 +22,8 @@ import java.util.List;
 @Path("/category")
 @AuthFilter
 @Produces(MediaType.APPLICATION_JSON)
-public class CategoryResourceImpl implements CategoryResource {
+@SessionScoped
+public class CategoryResourceImpl implements CategoryResource, Serializable {
 
     @EJB
     CategoryDAO categoryDAO;
