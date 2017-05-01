@@ -40,6 +40,7 @@ import java.util.*;
 @Path("/events")
 @AuthFilter
 @Produces(MediaType.APPLICATION_JSON)
+@RequestScoped
 public class EventsResourceImpl implements EventsResource, Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();
