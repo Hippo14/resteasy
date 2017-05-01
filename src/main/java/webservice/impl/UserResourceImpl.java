@@ -42,7 +42,6 @@ import java.util.UUID;
  * Created by MSI on 2016-10-09.
  */
 @Path("user")
-@RequestScoped
 public class UserResourceImpl implements UserResource, Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();

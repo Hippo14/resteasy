@@ -24,7 +24,6 @@ import java.util.UUID;
 @Path("/category")
 @AuthFilter
 @Produces(MediaType.APPLICATION_JSON)
-@RequestScoped
 public class CategoryResourceImpl implements CategoryResource, Serializable {
 
     private UUID uuid = java.util.UUID.randomUUID();
