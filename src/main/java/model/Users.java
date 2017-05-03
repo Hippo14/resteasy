@@ -2,6 +2,7 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.hibernate.annotations.LazyToOne;
 import utils.TimestampDeserializer;
 
 import javax.persistence.*;
@@ -37,8 +38,7 @@ public class Users implements Serializable {
     Timestamp dateDeleted;
     @Column(name = "userImage")
     String userImage;
-    @ManyToOne
-    @JoinColumn(name = "logoID")
+    @OneToOne(mappedBy = "user")
     UsersLogo usersLogo;
 
     public Users() { }
