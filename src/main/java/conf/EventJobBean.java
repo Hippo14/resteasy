@@ -15,13 +15,12 @@ import java.util.List;
  */
 @Startup
 @DependsOn("ConfigurationBean")
-@Singleton
 public class EventJobBean {
 
     final static Logger LOG = Logger.getLogger(EventJobBean.class);
 
     @EJB
-    EventsDAO eventsDAO;
+    EventJobDAO eventsDAO;
 
     @PostConstruct
     public void initialize() {

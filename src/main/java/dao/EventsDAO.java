@@ -242,38 +242,4 @@ public class EventsDAO implements Serializable {
         return usersEvents;
     }
 
-    public void deletePastEvents(List<Events> terminatedEvents) {
-        LOG.info("---------- START ----------");
-        LOG.info("CLASS: " + this.getClass().getSimpleName());
-        LOG.info("METHOD: " + this.getClass().getEnclosingMethod().getName());
-
-        for (Events elem : terminatedEvents) {
-            LOG.info("DELETING EVENT: id=" + elem.getId() + " name=" + elem.getName() + " latitude" + elem.getLatitude() + " longitude" + elem.getLongitude());
-            em.remove(elem);
-            LOG.info("EVENT DELETED");
-        }
-        LOG.info("ALL EVENTS SUCCESSFULLY DELETED");
-        LOG.info("---------- END ----------");
-    }
-
-    public List<Events> getTerminatedEvents(Date date) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Events> q = cb.createQuery(Events.class);
-        Root<Events> from = q.from(Events.class);
-        Predicate predicate = cb.and(
-                cb.equal(from.get(Events_.date_ending), date)
-        );
-
-        q.select(from).where(predicate);
-
-        List<Events> terminatedEvents = new ArrayList<>();
-
-        try {
-            terminatedEvents = em.createQuery(q).getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        }
-
-        return terminatedEvents;
-    }
 }
