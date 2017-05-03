@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -15,6 +16,7 @@ import java.util.Date;
  */
 @Startup
 @Singleton
+@LocalBean
 public class ConfigurationBean {
 
     public enum States {BEFORESTARTED, STARTED, PAUSED, SHUTTINGDOWN};

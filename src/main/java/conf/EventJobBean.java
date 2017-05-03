@@ -1,6 +1,5 @@
 package conf;
 
-import dao.EventsDAO;
 import model.Events;
 import org.apache.log4j.Logger;
 
@@ -15,6 +14,7 @@ import java.util.List;
  */
 @Startup
 @DependsOn("ConfigurationBean")
+@LocalBean
 public class EventJobBean {
 
     final static Logger LOG = Logger.getLogger(EventJobBean.class);
