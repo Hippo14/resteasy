@@ -19,10 +19,6 @@ public class UsersLogo implements Serializable{
     @Column(name = "image", length = 100000)
     byte[] image;
 
-    @OneToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "userId")
-    Users user;
-
     public UsersLogo() {
 
     }
@@ -39,13 +35,5 @@ public class UsersLogo implements Serializable{
 
     public void setImage(byte[] image) {
         this.image = image;
-    }
-
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
     }
 }
