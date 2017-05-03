@@ -145,7 +145,14 @@ public class UserResourceImpl implements UserResource, Serializable {
         LOG.info("[GET USER LOGO - " + " | requestMap - " + requestMap + "]");
 
         try {
-            response.put("image", logoUtils.get(token));
+            String[] subString = token.split("\\.");
+
+            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
+            String username = payload.getName();
+
+            byte[] imageB64 = Base64.encodeBase64(usersDAO.getByName(username).getUsersLogo().getImage());
+
+            response.put("image", new String(imageB64));
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
             e.printStackTrace();

@@ -25,6 +25,7 @@ public class LogoUtils implements Serializable {
     @EJB
     LogoDAO logoDAO;
 
+    @Deprecated
     public String get(String token) throws UnsupportedEncodingException {
         String[] subString = token.split("\\.");
 
@@ -38,7 +39,7 @@ public class LogoUtils implements Serializable {
     }
 
     public String get(Users users) {
-        UsersLogo usersLogo = logoDAO.getLogoForUser(users.getName());
+        UsersLogo usersLogo = users.getUsersLogo();
         byte[] imageB64 = Base64.encodeBase64(usersLogo.getImage());
 
         return new String(imageB64);

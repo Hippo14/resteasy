@@ -3,6 +3,7 @@ package dao;
 import model.Users;
 import model.UsersLogo;
 import model.UsersLogo_;
+import model.Users_;
 import org.apache.log4j.Logger;
 import org.jboss.resteasy.util.Base64;
 
@@ -72,28 +73,32 @@ public class LogoDAO implements Serializable {
         em.merge(users);
     }
 
+    @Deprecated
     public UsersLogo getLogoForUser(String username) {
-        Users users = usersDAO.getByName(username);
-
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<UsersLogo> q = cb.createQuery(UsersLogo.class);
-        Root<UsersLogo> from = q.from(UsersLogo.class);
-        Predicate predicate = cb.equal(from.get(UsersLogo_.user), users);
-
-        q.select(from).where(predicate);
-
-        return em.createQuery(q).getSingleResult();
+//        Users users = usersDAO.getByName(username);
+//
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<UsersLogo> q = cb.createQuery(UsersLogo.class);
+//        Root<UsersLogo> from = q.from(UsersLogo.class);
+//        Predicate predicate = cb.equal(from.get(Users_.name), users.getName());
+//
+//        q.select(from).where(predicate);
+//
+//        return em.createQuery(q).getSingleResult();
+        return usersDAO.getByName(username).getUsersLogo();
     }
 
+    @Deprecated
     public UsersLogo getLogoForUser(Users users) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<UsersLogo> q = cb.createQuery(UsersLogo.class);
-        Root<UsersLogo> from = q.from(UsersLogo.class);
-        Predicate predicate = cb.equal(from.get(UsersLogo_.user), users);
-
-        q.select(from).where(predicate);
-
-        return em.createQuery(q).getSingleResult();
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<UsersLogo> q = cb.createQuery(UsersLogo.class);
+//        Root<UsersLogo> from = q.from(UsersLogo.class);
+//        Predicate predicate = cb.equal(from.get(UsersLogo_.user), users);
+//
+//        q.select(from).where(predicate);
+//
+//        return em.createQuery(q).getSingleResult();
+        return users.getUsersLogo();
     }
 
 }
