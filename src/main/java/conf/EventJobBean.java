@@ -25,14 +25,14 @@ public class EventJobBean {
     @PostConstruct
     public void initialize() {
         LOG.info("CLASS :" + this.getClass().getSimpleName());
-        LOG.info("METHOD :" + this.getClass().getEnclosingMethod().getName());
+        LOG.info("METHOD :" + Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
     @Schedule(second ="*", minute = "*",hour = "*/6", persistent = false)
     public void deletePastEvents() {
         LOG.info("---------- START JOB ----------");
         LOG.info("CLASS: " + this.getClass().getSimpleName().toString());
-        LOG.info("METHOD: " + this.getClass().getEnclosingMethod().getName());
+        LOG.info("METHOD :" + Thread.currentThread().getStackTrace()[1].getMethodName());
 
         Long start = System.currentTimeMillis();
         Date actualDate = new Date();
