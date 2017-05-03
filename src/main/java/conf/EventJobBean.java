@@ -30,7 +30,7 @@ public class EventJobBean {
         LOG.info("METHOD :" + this.getClass().getEnclosingMethod().getName());
     }
 
-    @Schedule(hour = "*/6", persistent = false)
+    @Schedule(second ="*", minute = "*",hour = "*/6", persistent = false)
     public void deletePastEvents() {
         LOG.info("---------- START JOB ----------");
         LOG.info("CLASS: " + this.getClass().getSimpleName().toString());
