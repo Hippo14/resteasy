@@ -120,8 +120,10 @@ public class EventsResourceImpl implements EventsResource, Serializable {
 
         double latitude = (double) body.get("latitude");
         double longitude = (double) body.get("longitude");
+        String cityName = (String) body.get("cityName");
+        Date actualDate = (Date) body.get("actualDate");
 
-        List<Events> eventsList = eventsDAO.getByLocation("", latitude, longitude);
+        List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude, actualDate);
 
         StringBuilder eventString = new StringBuilder("");
         for (Events event : eventsList) {
