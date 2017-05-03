@@ -4,6 +4,7 @@ import dao.EventsDAO;
 import model.Events;
 import org.apache.log4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.DependsOn;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
@@ -23,7 +24,13 @@ public class EventJobBean {
     @EJB
     EventsDAO eventsDAO;
 
-    @Schedule(hour = "*/20", persistent = false)
+    @PostConstruct
+    public void initialize() {
+        LOG.info("CLASS :" + this.getClass().getSimpleName());
+        LOG.info("METHOD :" + this.getClass().getEnclosingMethod().getName());
+    }
+
+    @Schedule(hour = "*/6", persistent = false)
     public void deletePastEvents() {
         LOG.info("---------- START JOB ----------");
         LOG.info("CLASS: " + this.getClass().getSimpleName().toString());
