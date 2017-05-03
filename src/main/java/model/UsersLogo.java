@@ -19,7 +19,7 @@ public class UsersLogo implements Serializable{
     @Column(name = "image", length = 100000)
     byte[] image;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "userId")
     Users user;
 
