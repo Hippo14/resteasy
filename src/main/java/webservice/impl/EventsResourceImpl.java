@@ -285,7 +285,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         }
 
 
-        return Response.ok().build();
+        return Response.ok("User added!").build();
     }
 
 }

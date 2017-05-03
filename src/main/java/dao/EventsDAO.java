@@ -213,6 +213,7 @@ public class EventsDAO implements Serializable {
         UsersEvents usersEvents = getUsersEvent(user, event);
         if (usersEvents != null) {
             // Błąd nic nie rób!!!
+            return null;
         }
         usersEvents = new UsersEvents(user, event);
         em.persist(usersEvents);
