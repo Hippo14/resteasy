@@ -124,7 +124,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         double longitude = (double) body.get("longitude");
         String cityName = (String) body.get("cityName");
 
-        SimpleDateFormat df = new SimpleDateFormat("MMM d, yyyy HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
 
         Date actualDate = new Date();
         try {
