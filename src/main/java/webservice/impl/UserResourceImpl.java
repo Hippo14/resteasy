@@ -5,11 +5,8 @@ import config.ErrorConfig;
 import dao.LogoDAO;
 import dao.UsersDAO;
 import model.Users;
-import model.UsersLogo;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Base64OutputStream;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import secure.RSA;
@@ -20,11 +17,8 @@ import webservice.AuthFilter;
 import webservice.UserResource;
 import webservice.credentials.EmailPassCred;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.SessionContext;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
@@ -82,8 +76,6 @@ public class UserResourceImpl implements UserResource, Serializable {
         String decryptedPassword = decryptPassword(newUser.getPassword());
         newUser.setPassword(decryptedPassword);
 
-        // Add new user
-        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
         // Add default profile image
         InputStream input = getClass().getClassLoader().getResourceAsStream("/files/images/default.png");
         BufferedImage image = null;
@@ -98,10 +90,13 @@ public class UserResourceImpl implements UserResource, Serializable {
         OutputStream b64 = new Base64OutputStream(os);
         try {
             ImageIO.write(image, "png", b64);
-            logoDAO.setLogoForUser(newUser, os.toString("UTF-8"));
+            logoDAO.setLogoForNewUser(newUser, os.toString("UTF-8"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Add new user
+        String jsonResponse = ObjectToJsonUtils.convertToJson(usersDAO.createNewUser(newUser));
 
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
     }
@@ -175,7 +170,7 @@ public class UserResourceImpl implements UserResource, Serializable {
             Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
             String username = payload.getName();
 
-            logoDAO.setLogoForUser(username, image);
+            logoDAO.setLogoForNewUser(username, image);
         } catch (UnsupportedEncodingException e) {
             LOG.info("[SET USER LOGO - error  e - " + e.getMessage());
 

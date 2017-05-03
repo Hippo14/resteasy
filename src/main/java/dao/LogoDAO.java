@@ -38,7 +38,7 @@ public class LogoDAO implements Serializable {
 
     final static Logger LOG = Logger.getLogger(UsersDAO.class);
 
-    public void setLogoForUser(String username, String image) {
+    public void setLogoForNewUser(String username, String image) {
         Users users = usersDAO.getByName(username);
         UsersLogo usersLogo = users.getUsersLogo();
 //        UsersLogo usersLogo = new UsersLogo();
@@ -57,7 +57,7 @@ public class LogoDAO implements Serializable {
         em.merge(users);
     }
 
-    public void setLogoForUser(Users users, String image) {
+    public void setLogoForNewUser(Users users, String image) {
         UsersLogo usersLogo = new UsersLogo();
 
         byte[] imageFromB64 = null;
@@ -68,9 +68,6 @@ public class LogoDAO implements Serializable {
         }
         usersLogo.setImage(imageFromB64);
         users.setUsersLogo(usersLogo);
-
-        //em.merge(usersLogo);
-        em.merge(users);
     }
 
     @Deprecated
