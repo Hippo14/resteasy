@@ -26,6 +26,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -55,7 +56,7 @@ public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilt
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
+        String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream(), "UTF-8"))
                 .lines().collect(Collectors.joining("\n"));
         LOG.info("[CONNECTION EVENT: REQUEST - " + result + "]");
 
