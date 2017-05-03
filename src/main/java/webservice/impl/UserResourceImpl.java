@@ -108,14 +108,13 @@ public class UserResourceImpl implements UserResource, Serializable {
 
     @Override
     @AuthFilter
-    public Users getUserByToken(@Context HttpRequest request) {
+    public Map<String, Users> getUserByToken(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
 
         String token = (String) requestMap.get("token");
+        Map<String, Users> response = new HashMap<>();
 
         LOG.info("[GET USER BY TOKEN - " + " | requestMap - " + requestMap + "]");
-
-        Users user = null;
 
         try {
             String[] subString = token.split("\\.");
@@ -123,7 +122,7 @@ public class UserResourceImpl implements UserResource, Serializable {
             Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
             String username = payload.getName();
 
-            user = usersDAO.getByName(username);
+            response.put("user", usersDAO.getByName(username));
 
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
@@ -131,7 +130,7 @@ public class UserResourceImpl implements UserResource, Serializable {
             e.printStackTrace();
         }
 
-        return user;
+        return response;
     }
 
     @Override

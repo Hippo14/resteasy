@@ -42,7 +42,7 @@ public interface UserResource {
     @Path("/getUserByToken")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Users getUserByToken(@Context HttpRequest request);
+    Map<String, Users> getUserByToken(@Context HttpRequest request);
 
     @POST
     @AuthFilter
