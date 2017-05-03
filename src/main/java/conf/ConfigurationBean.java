@@ -1,7 +1,6 @@
 package conf;
 
 
-import dao.UsersDAO;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +19,7 @@ public class ConfigurationBean {
 
     public enum States {BEFORESTARTED, STARTED, PAUSED, SHUTTINGDOWN};
     private States state;
-    final static Logger LOG = Logger.getLogger(UsersDAO.class);
+    final static Logger LOG = Logger.getLogger(ConfigurationBean.class);
 
     @PostConstruct
     public void initialize() {
