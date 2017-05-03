@@ -37,6 +37,9 @@ public class Users implements Serializable {
     Timestamp dateDeleted;
     @Column(name = "userImage")
     String userImage;
+    @ManyToOne
+    @JoinColumn(name = "logoID")
+    UsersLogo usersLogo;
 
     public Users() { }
 
@@ -119,6 +122,14 @@ public class Users implements Serializable {
 
     public void setProfiles(Profiles profiles) {
         this.profiles = profiles;
+    }
+
+    public UsersLogo getUsersLogo() {
+        return usersLogo;
+    }
+
+    public void setUsersLogo(UsersLogo usersLogo) {
+        this.usersLogo = usersLogo;
     }
 
 //    @Override
