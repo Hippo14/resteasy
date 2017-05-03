@@ -28,6 +28,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -121,7 +123,15 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         double latitude = (double) body.get("latitude");
         double longitude = (double) body.get("longitude");
         String cityName = (String) body.get("cityName");
-        Date actualDate = (Date) body.get("actualDate");
+
+        SimpleDateFormat df = new SimpleDateFormat("MMM d, yyyy HH:mm:ss");
+
+        Date actualDate = new Date();
+        try {
+            actualDate = df.parse((String) body.get("actualDate"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude, actualDate);
 
