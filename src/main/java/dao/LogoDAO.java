@@ -58,6 +58,7 @@ public class LogoDAO implements Serializable {
     public void setLogoForUser(Users users, String image) {
         UsersLogo usersLogo = new UsersLogo();
         usersLogo.setUser(users);
+        users.setUsersLogo(usersLogo);
 
         byte[] imageFromB64 = null;
         try {
@@ -69,6 +70,7 @@ public class LogoDAO implements Serializable {
         usersLogo.setImage(imageFromB64);
 
         em.merge(usersLogo);
+        em.merge(users);
     }
 
     public UsersLogo getLogoForUser(String username) {
