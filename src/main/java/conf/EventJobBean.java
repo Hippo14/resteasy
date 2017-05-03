@@ -5,16 +5,14 @@ import model.Events;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.DependsOn;
-import javax.ejb.EJB;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
+import javax.ejb.*;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by MSI on 2017-05-03.
  */
+@Startup
 @DependsOn("ConfigurationBean")
 @Singleton
 public class EventJobBean {
