@@ -38,7 +38,7 @@ public class Users implements Serializable {
     Timestamp dateDeleted;
     @Column(name = "userImage")
     String userImage;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "logoID")
     UsersLogo usersLogo;
 
