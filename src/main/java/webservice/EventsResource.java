@@ -2,6 +2,7 @@ package webservice;
 
 import model.Events;
 import model.Marker;
+import model.UsersEvents;
 import org.jboss.resteasy.spi.HttpRequest;
 import webservice.credentials.Token;
 
@@ -70,12 +71,12 @@ public interface EventsResource {
     @Path("/getUserListEvent")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Map<String, Map<String, String>> getUserListEvent(@Context HttpRequest request);
+    List<UsersEvents> getUserListEvent(@Context HttpRequest request);
 
     @POST
     @Path("/addToEvent")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    Response addUserToEvent(@Context HttpRequest request);
+    String addUserToEvent(@Context HttpRequest request);
 
 }

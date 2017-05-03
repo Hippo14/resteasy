@@ -8,6 +8,7 @@ import dao.UsersDAO;
 import model.Events;
 import model.Marker;
 import model.Users;
+import model.UsersEvents;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -234,27 +235,27 @@ public class EventsResourceImpl implements EventsResource, Serializable {
     }
 
     @Override
-    public Map<String, Map<String, String>> getUserListEvent(@Context HttpRequest request) {
+    public List<UsersEvents> getUserListEvent(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
         HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
 
         Double latitude = Double.parseDouble(body.get("latitude"));
         Double longitude = Double.parseDouble(body.get("longitude"));
 
-        List<String> userList = eventsDAO.getUserListEvent(latitude, longitude);
+        List<UsersEvents> userList = eventsDAO.getUserListEvent(latitude, longitude);
 
-        Map<String, Map<String, String>> response = new HashMap<>();
-        for (String elem : userList) {
-            Map<String, String> map = new HashMap<>();
+//        Map<String, Map<String, String>> response = new HashMap<>();
+//        for (String elem : userList) {
+//            Map<String, String> map = new HashMap<>();
+//
+//            map.put("user", elem);
+//        }
 
-            map.put("user", elem);
-        }
-
-        return response;
+        return userList;
     }
 
     @Override
-    public Response addUserToEvent(@Context HttpRequest request) {
+    public String addUserToEvent(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
         HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
         Map<String, String> response = new HashMap<>();
@@ -285,7 +286,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         }
 
 
-        return Response.ok("User added!").build();
+        return "User added!";
     }
 
 }

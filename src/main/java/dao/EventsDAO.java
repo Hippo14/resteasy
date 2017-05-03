@@ -182,7 +182,7 @@ public class EventsDAO implements Serializable {
         return events;
     }
 
-    public List<String> getUserListEvent(Double latitude, Double longitude) {
+    public List<UsersEvents> getUserListEvent(Double latitude, Double longitude) {
         Events event = getByLocation(latitude, longitude);
 
         CriteriaBuilder cb1 = em.getCriteriaBuilder();
@@ -199,13 +199,7 @@ public class EventsDAO implements Serializable {
             usersEvents = new ArrayList<>();
         }
 
-        List<String> result = new ArrayList<>();
-
-        for (UsersEvents user : usersEvents) {
-            result.add(user.getUsers().getName());
-        }
-
-        return result;
+        return usersEvents;
     }
 
     public Users addUserToEvent(Users user, Double latitude, Double longitude) {
