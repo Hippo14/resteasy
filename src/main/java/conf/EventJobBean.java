@@ -1,12 +1,12 @@
 package conf;
 
+import dao.EventJobDAO;
 import model.Events;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 

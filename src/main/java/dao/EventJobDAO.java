@@ -1,14 +1,11 @@
-package conf;
+package dao;
 
 import model.Events;
 import model.Events_;
 import org.apache.log4j.Logger;
 
-import javax.ejb.Singleton;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -36,7 +33,8 @@ public class EventJobDAO {
 
         for (Events elem : terminatedEvents) {
             LOG.info("DELETING EVENT: id=" + elem.getId() + " name=" + elem.getName() + " latitude" + elem.getLatitude() + " longitude" + elem.getLongitude());
-            em.remove(elem);
+            elem.setDeleted((byte) 1);
+            em.merge(elem);
             LOG.info("EVENT DELETED");
         }
         LOG.info("ALL EVENTS SUCCESSFULLY DELETED");
