@@ -5,6 +5,7 @@ import model.Events;
 import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.*;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class EventJobBean {
         LOG.info("METHOD :" + Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
-    @Schedule(second ="*", minute = "*",hour = "*/6", persistent = false)
+    @Schedule(second ="*", minute = "*",hour = "*/60", persistent = false)
     public void deletePastEvents() {
         LOG.info("---------- START JOB ----------");
         LOG.info("CLASS: " + this.getClass().getSimpleName().toString());
@@ -51,6 +52,12 @@ public class EventJobBean {
 
         LOG.info("EXECUTION TIME: " + (stop - start) + "ms");
         LOG.info("---------- END JOB ----------");
+    }
+
+    @PreDestroy
+    public void terminate() {
+        LOG.info("CLASS :" + this.getClass().getSimpleName());
+        LOG.info("METHOD :" + Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
 }
