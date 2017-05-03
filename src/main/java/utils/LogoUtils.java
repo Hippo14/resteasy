@@ -2,6 +2,7 @@ package utils;
 
 import auth.parts.Payload;
 import dao.LogoDAO;
+import model.Users;
 import model.UsersLogo;
 import org.apache.commons.codec.binary.Base64;
 
@@ -36,4 +37,10 @@ public class LogoUtils implements Serializable {
         return new String(imageB64);
     }
 
+    public String get(Users users) {
+        UsersLogo usersLogo = logoDAO.getLogoForUser(users.getName());
+        byte[] imageB64 = Base64.encodeBase64(usersLogo.getImage());
+
+        return new String(imageB64);
+    }
 }

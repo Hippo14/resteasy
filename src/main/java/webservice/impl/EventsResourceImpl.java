@@ -185,12 +185,8 @@ public class EventsResourceImpl implements EventsResource, Serializable {
             map.put("name", event.getName());
             map.put("description", event.getDescription());
             map.put("username", event.getUsers().getName());
-            try {
-                map.put("image", logoUtils.get(token));
-            } catch (UnsupportedEncodingException e) {
-                LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
-                e.printStackTrace();
-            }
+            map.put("image", logoUtils.get(event.getUsers()));
+
             response.put(Integer.toString(i++), map);
         }
 
