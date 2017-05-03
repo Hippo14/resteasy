@@ -79,7 +79,7 @@ public class EventsDAO implements Serializable {
                 cb.gt(longitudeDb, longitude - 0.5),
                 cb.lt(longitudeDb, longitude + 0.5),
                 cb.lessThan(dateEndingDb, actualDate.getTime()),
-                cb.equal(from.get(Events_.deleted), false)
+                cb.equal(from.get(Events_.deleted), 0)
         );
         q.select(from).where(predicate);
 

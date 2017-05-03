@@ -127,11 +127,11 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
 
         Date actualDate = new Date();
-        try {
-            actualDate = df.parse((String) body.get("actualDate"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            actualDate = df.parse((String) body.get("actualDate"));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
         List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude, actualDate);
 
