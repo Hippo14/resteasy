@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 @Startup
 @DependsOn("ConfigurationBean")
-@LocalBean
+@Singleton
 public class EventJobBean {
 
     final static Logger LOG = Logger.getLogger(EventJobBean.class);
@@ -28,11 +29,10 @@ public class EventJobBean {
         LOG.info("METHOD :" + Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 
-    @Schedule(minute = "*/5",hour = "*", persistent = false)
+    @Schedule(hour = "*/1", persistent = false)
     public void deletePastEvents() {
         LOG.info("---------- START JOB ----------");
         LOG.info("CLASS: " + this.getClass().getSimpleName().toString());
-        LOG.info("METHOD :" + Thread.currentThread().getStackTrace()[1].getMethodName());
 
         Long start = System.currentTimeMillis();
         Date actualDate = new Date();

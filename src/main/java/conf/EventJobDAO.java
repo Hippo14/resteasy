@@ -4,6 +4,8 @@ import model.Events;
 import model.Events_;
 import org.apache.log4j.Logger;
 
+import javax.ejb.Singleton;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * Created by MSI on 2017-05-03.
  */
-@Stateless
+@Stateful
 public class EventJobDAO {
 
     final static Logger LOG = Logger.getLogger(EventJobDAO.class);
@@ -31,7 +33,6 @@ public class EventJobDAO {
     public void deletePastEvents(List<Events> terminatedEvents) {
         LOG.info("---------- START ----------");
         LOG.info("CLASS: " + this.getClass().getSimpleName());
-        LOG.info("METHOD: " + this.getClass().getEnclosingMethod().getName());
 
         for (Events elem : terminatedEvents) {
             LOG.info("DELETING EVENT: id=" + elem.getId() + " name=" + elem.getName() + " latitude" + elem.getLatitude() + " longitude" + elem.getLongitude());
@@ -54,11 +55,7 @@ public class EventJobDAO {
 
         List<Events> terminatedEvents = new ArrayList<>();
 
-        try {
-            terminatedEvents = em.createQuery(q).getResultList();
-        } catch (NoResultException e) {
-            return new ArrayList<>();
-        }
+        terminatedEvents = em.createQuery(q).getResultList();
 
         return terminatedEvents;
     }

@@ -16,7 +16,6 @@ import java.util.Date;
  */
 @Startup
 @Singleton
-@LocalBean
 public class ConfigurationBean {
 
     public enum States {BEFORESTARTED, STARTED, PAUSED, SHUTTINGDOWN};
