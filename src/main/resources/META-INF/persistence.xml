@@ -19,7 +19,7 @@
             <property name="hibernate.archive.autodetection" value="class, hbm"/>
             <!--<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />-->
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform" />
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
