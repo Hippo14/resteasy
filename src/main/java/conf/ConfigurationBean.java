@@ -9,6 +9,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import java.util.Date;
 
 /**
  * Created by MSI on 2016-10-19.
@@ -36,9 +37,10 @@ public class ConfigurationBean {
         LOG.info("Shut down in progress");
     }
 
-    @Schedule(second = "*", minute = "*/5", hour = "*", persistent = false)
+    @Schedule(second = "*", minute = "*/1", hour = "*", persistent = false)
     public void doWork() {
-        System.out.println("Do work!");
+        Date date = new Date();
+        LOG.info("Scheduling work - " + date.getTime());
     }
 
 }
