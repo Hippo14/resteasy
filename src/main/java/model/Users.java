@@ -38,7 +38,7 @@ public class Users implements Serializable {
     Timestamp dateDeleted;
     @Column(name = "userImage")
     String userImage;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "logoID")
     UsersLogo usersLogo;
 
