@@ -34,6 +34,7 @@ public class EventJobDAO {
         for (Events elem : terminatedEvents) {
             LOG.info("DELETING EVENT: id=" + elem.getId() + " name=" + elem.getName() + " latitude" + elem.getLatitude() + " longitude" + elem.getLongitude());
             elem.setDeleted((byte) 1);
+            elem.setActive((byte) 0);
             em.merge(elem);
             LOG.info("EVENT DELETED");
         }
