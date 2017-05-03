@@ -210,7 +210,7 @@ public class EventsDAO implements Serializable {
 
     public Users addUserToEvent(Users user, Double latitude, Double longitude) {
         Events event = getByLocation(latitude, longitude);
-        UsersEvents usersEvents = getUsersEvent(user, latitude, longitude, event);
+        UsersEvents usersEvents = getUsersEvent(user, event);
         if (usersEvents != null) {
             // Błąd nic nie rób!!!
         }
@@ -220,7 +220,7 @@ public class EventsDAO implements Serializable {
         return user;
     }
 
-    private UsersEvents getUsersEvent(Users user, Double latitude, Double longitude, Events event) {
+    private UsersEvents getUsersEvent(Users user, Events event) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<UsersEvents> q = cb.createQuery(UsersEvents.class);
         Root<UsersEvents> from = q.from(UsersEvents.class);
@@ -231,6 +231,17 @@ public class EventsDAO implements Serializable {
 
         q.select(from).where(predicate);
 
-        return em.createQuery(q).getSingleResult();
+
+        UsersEvents usersEvents = null;
+
+        try {
+            usersEvents = em.createQuery(q).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (NonUniqueResultException e) {
+            usersEvents = em.createQuery(q).setMaxResults(1).getResultList().get(0);
+        }
+
+        return usersEvents;
     }
 }
