@@ -37,7 +37,7 @@ public class ConfigurationBean {
         LOG.info("Shut down in progress");
     }
 
-    @Schedule(second = "*", minute = "*/1", hour = "*", persistent = false)
+    @Schedule(hour = "*/1", persistent = false)
     public void doWork() {
         Date date = new Date();
         LOG.info("Scheduling work - " + date.getTime());
