@@ -69,7 +69,7 @@ public class LogoDAO implements Serializable {
 
         usersLogo.setImage(imageFromB64);
 
-        em.merge(usersLogo);
+        //em.merge(usersLogo);
         em.merge(users);
     }
 
