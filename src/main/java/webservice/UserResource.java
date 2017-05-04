@@ -18,42 +18,34 @@ import java.util.Map;
 public interface UserResource {
 
     @GET
-    @Path("/get/{name}")
-    Response getByName(@PathParam("name") String name);
-
-//    @GET
-//    @Path("/get/{email}/{password}")
-//    String getByEmailAndPassword(@PathParam("email") String email, @PathParam("password") String password);
-
-    @POST
-    @Path("/login")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
-    @Path("/register")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewUser(Users newUser);
 
-    @POST
+    @GET
     @AuthFilter
-    @Path("/getUserByToken")
+    @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Users getUserByToken(@Context HttpRequest request);
 
-    @POST
+    @GET
     @AuthFilter
-    @Path("/getUserLogo")
+    @Path("/logo")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, String> getUserLogo(@Context HttpRequest request);
 
     @POST
     @AuthFilter
-    @Path("/setUserLogo")
+    @Path("/logo")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Boolean setUserLogo(@Context HttpRequest request);

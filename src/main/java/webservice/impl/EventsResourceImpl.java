@@ -58,28 +58,6 @@ public class EventsResourceImpl implements EventsResource, Serializable {
     final static Logger LOG = Logger.getLogger(EventsResourceImpl.class);
 
     @Override
-    public Response getAll(Token token) {
-        List<Events> events = eventsDAO.getAll();
-        if (events == null)
-            return Response.serverError().build();
-
-        GenericEntity<List<Events>> ge = new GenericEntity<List<Events>>(events){};
-        return Response.ok(ge).build();
-    }
-
-    @Override
-    @Path("{id}")
-    public Response getById(@PathParam("id") Integer id) {
-        return Response.ok(eventsDAO.getById(id)).build();
-    }
-
-    @Override
-    @Path("{name}")
-    public Response getByName(@PathParam("name") String name) {
-        return Response.ok(eventsDAO.getByName(name)).build();
-    }
-
-    @Override
     public Response registerNewEvent(@Context HttpRequest request) {
         HashMap<String, Object> hashMap = (HashMap<String, Object>) request.getAttribute("request");
         HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");

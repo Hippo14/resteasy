@@ -19,62 +19,51 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @AuthFilter
 public interface EventsResource {
-    @POST
-    @Path("")
-    Response getAll(Token token);
-
-    @GET
-    @Path("{id}")
-    Response getById(@PathParam("id") Integer id);
-
-    @GET
-    @Path("{name}")
-    Response getByName(@PathParam("name") String name);
 
     @POST
-    @Path("/add")
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewEvent(@Context HttpRequest request);
 
-    @POST
-    @Path("/get")
+    @GET
+    @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     List<Events> getEvents(@Context HttpRequest request);
 
-    @POST
+    @GET
     @Path("/marker")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Marker getMarkerDetails(@Context HttpRequest request);
 
-    @POST
+    @GET
     @Path("/details")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Events getEventDetails(@Context HttpRequest request);
 
-    @POST
+    @GET
     @Path("/board")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, Map<String, String>> getBoard(@Context HttpRequest request);
 
-    @POST
-    @Path("/getByUser")
+    @GET
+    @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, Map<String, String>> getEventsByUser(@Context HttpRequest request);
 
-    @POST
-    @Path("/getUserListEvent")
+    @GET
+    @Path("/list/user")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     List<UsersEvents> getUserListEvent(@Context HttpRequest request);
 
     @POST
-    @Path("/addToEvent")
+    @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     String addUserToEvent(@Context HttpRequest request);

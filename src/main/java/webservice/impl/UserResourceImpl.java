@@ -53,11 +53,6 @@ public class UserResourceImpl implements UserResource, Serializable {
     LogoUtils logoUtils;
 
     @Override
-    public Response getByName(String name) {
-        return Response.ok(usersDAO.getByName(name)).build();
-    }
-
-    @Override
     public Response getByEmailAndPassword(EmailPassCred credentials) {
         LOG.info("[LOGIN USER EVENT - "+ " | email: " + credentials.getEmail() + " | password: " + credentials.getPassword() + " ]");
 
