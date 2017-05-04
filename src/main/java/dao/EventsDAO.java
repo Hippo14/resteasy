@@ -252,4 +252,12 @@ public class EventsDAO implements Serializable {
         return usersEvents;
     }
 
+    public Users removeUserFromEvent(Users user, Double latitude, Double longitude) {
+        Events event = getByLocation(latitude, longitude);
+        UsersEvents usersEvents = getUsersEvent(user, event);
+
+        em.remove(usersEvents);
+
+        return user;
+    }
 }

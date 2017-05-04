@@ -74,4 +74,10 @@ public interface EventsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, String> getLikedEvents(@Context HttpRequest request);
 
+    @POST
+    @Path("/user/remove")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    String deleteUserFromEvent(@Context HttpRequest request);
+
 }
