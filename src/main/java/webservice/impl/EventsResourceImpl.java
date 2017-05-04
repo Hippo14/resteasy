@@ -237,7 +237,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
     }
 
     @Override
-    public String addUserToEvent(@Context HttpRequest request) {
+    public Map<String, String> addUserToEvent(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
         HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
         Map<String, String> response = new HashMap<>();
@@ -262,8 +262,9 @@ public class EventsResourceImpl implements EventsResource, Serializable {
             throw new WebApplicationException(ErrorConfig.USER_EXISTS_IN_EVENT);
         }
 
+        response.put("result", "User added!");
 
-        return "User added!";
+        return response;
     }
 
     @Override
@@ -283,7 +284,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
     }
 
     @Override
-    public String deleteUserFromEvent(@Context HttpRequest request) {
+    public Map<String, String> deleteUserFromEvent(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
         HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
         Map<String, String> response = new HashMap<>();
@@ -308,7 +309,9 @@ public class EventsResourceImpl implements EventsResource, Serializable {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
-        return "Deleted!";
+        response.put("result", "Deleted!");
+
+        return response;
     }
 
     @Override

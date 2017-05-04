@@ -65,7 +65,7 @@ public interface EventsResource {
     @Path("/user/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    String addUserToEvent(@Context HttpRequest request);
+    Map<String, String> addUserToEvent(@Context HttpRequest request);
 
     @POST
     @Path("/user/count")
@@ -77,7 +77,7 @@ public interface EventsResource {
     @Path("/user/remove")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    String deleteUserFromEvent(@Context HttpRequest request);
+    Map<String, String> deleteUserFromEvent(@Context HttpRequest request);
 
     @POST
     @Path("/user/status")
