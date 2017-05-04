@@ -1,6 +1,5 @@
 package webservice.impl;
 
-import auth.parts.Payload;
 import config.ErrorConfig;
 import dao.EventsDAO;
 import dao.TokensDAO;
@@ -10,7 +9,6 @@ import model.Events;
 import model.Marker;
 import model.Users;
 import model.UsersEvents;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
@@ -19,13 +17,11 @@ import utils.LogoUtils;
 import utils.ObjectToJsonUtils;
 import webservice.AuthFilter;
 import webservice.EventsResource;
-import webservice.credentials.Token;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
@@ -268,6 +264,22 @@ public class EventsResourceImpl implements EventsResource, Serializable {
 
 
         return "User added!";
+    }
+
+    @Override
+    public Map<String, String> getLikedEvents(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        String token = (String) requestMap.get("token");
+
+        Map<String, String> result = new HashMap<>();
+
+        try {
+            result.put("likedEvents", Long.toString(usersEventsDAO.getLikedEvents(JWTUtils.getUsername(token))));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }

@@ -68,4 +68,10 @@ public interface EventsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     String addUserToEvent(@Context HttpRequest request);
 
+    @POST
+    @Path("/user/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Map<String, String> getLikedEvents(@Context HttpRequest request);
+
 }

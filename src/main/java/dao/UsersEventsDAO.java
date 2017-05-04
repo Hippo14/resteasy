@@ -3,6 +3,7 @@ package dao;
 import model.*;
 import org.apache.log4j.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -29,6 +30,9 @@ public class UsersEventsDAO {
     @PersistenceContext(name = "NewPersistenceUnit", type = PersistenceContextType.EXTENDED)
     EntityManager em;
 
+    @EJB
+    UsersDAO usersDAO;
+
     public List<Events> getByUser(Users users) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<UsersEvents> q = cb.createQuery(UsersEvents.class);
@@ -54,4 +58,17 @@ public class UsersEventsDAO {
         return result;
     }
 
+    public Long getLikedEvents(String username) {
+        Users user = usersDAO.getByName(username);
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        Root<UsersEvents> from = q.from(UsersEvents.class);
+
+        Predicate predicate = cb.equal(from.get(UsersEvents_.users), user);
+
+        q.select(cb.count(from)).where(predicate);
+
+        return em.createQuery(q).getSingleResult();
+    }
 }
