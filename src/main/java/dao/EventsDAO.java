@@ -65,20 +65,20 @@ public class EventsDAO implements Serializable {
         em.persist(event);
     }
 
-    public List<Events> getByLocation(String cityName, double latitude, double longitude, Date actualDate) {
+    public List<Events> getByLocation(String cityName, double latitude, double longitude, Timestamp actualDate) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Events> q = cb.createQuery(Events.class);
         Root<Events> from = q.from(Events.class);
 
         Path<Double> latitudeDb = from.get("latitude");
         Path<Double> longitudeDb = from.get("longitude");
-        Path<Long> dateEndingDb = from.get("date_ending");
+        Path<Timestamp> dateEndingDb = from.get("date_ending");
         Predicate predicate = cb.and(
                 cb.gt(latitudeDb, latitude - 0.5),
                 cb.lt(latitudeDb, latitude + 0.5),
                 cb.gt(longitudeDb, longitude - 0.5),
                 cb.lt(longitudeDb, longitude + 0.5),
-                cb.lessThan(dateEndingDb, actualDate.getTime()),
+                cb.lessThan(dateEndingDb, actualDate),
                 cb.equal(from.get(Events_.deleted), 0)
         );
         q.select(from).where(predicate);

@@ -28,6 +28,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -133,7 +134,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
 //            e.printStackTrace();
 //        }
 
-        List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude, actualDate);
+        List<Events> eventsList = eventsDAO.getByLocation(cityName, latitude, longitude, new Timestamp(actualDate.getTime()));
 
         StringBuilder eventString = new StringBuilder("");
         for (Events event : eventsList) {
