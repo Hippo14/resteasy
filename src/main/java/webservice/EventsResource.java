@@ -4,7 +4,6 @@ import model.Events;
 import model.Marker;
 import model.UsersEvents;
 import org.jboss.resteasy.spi.HttpRequest;
-import webservice.credentials.Token;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -79,5 +78,11 @@ public interface EventsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     String deleteUserFromEvent(@Context HttpRequest request);
+
+    @POST
+    @Path("/user/status")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    Boolean getUserStatusEvent(@Context HttpRequest request);
 
 }

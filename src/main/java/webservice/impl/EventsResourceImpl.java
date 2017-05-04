@@ -308,8 +308,30 @@ public class EventsResourceImpl implements EventsResource, Serializable {
             throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
         }
 
-
         return "Deleted!";
+    }
+
+    @Override
+    public Boolean getUserStatusEvent(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
+        Map<String, String> response = new HashMap<>();
+
+        String token = (String) requestMap.get("token");
+
+        Double latitude = Double.parseDouble(body.get("latitude"));
+        Double longitude = Double.parseDouble(body.get("longitude"));
+        Users user = null;
+
+        try {
+            user = usersDAO.getByName(JWTUtils.getUsername(token));
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+        return eventsDAO.getUserStatusEvent(user, latitude, longitude);
     }
 
 }
