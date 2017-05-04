@@ -19,7 +19,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @AuthFilter
 public interface CategoryResource {
-    @GET
+    @POST
     @Path("")
     List<Category> getAll(@Context HttpRequest request);
 }

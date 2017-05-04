@@ -26,37 +26,37 @@ public interface EventsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewEvent(@Context HttpRequest request);
 
-    @GET
+    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     List<Events> getEvents(@Context HttpRequest request);
 
-    @GET
+    @POST
     @Path("/marker")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Marker getMarkerDetails(@Context HttpRequest request);
 
-    @GET
+    @POST
     @Path("/details")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Events getEventDetails(@Context HttpRequest request);
 
-    @GET
+    @POST
     @Path("/board")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, Map<String, String>> getBoard(@Context HttpRequest request);
 
-    @GET
+    @POST
     @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, Map<String, String>> getEventsByUser(@Context HttpRequest request);
 
-    @GET
+    @POST
     @Path("/list/user")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

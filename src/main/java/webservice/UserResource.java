@@ -17,7 +17,7 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface UserResource {
 
-    @GET
+    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -29,14 +29,14 @@ public interface UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewUser(Users newUser);
 
-    @GET
+    @POST
     @AuthFilter
     @Path("/token")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Users getUserByToken(@Context HttpRequest request);
 
-    @GET
+    @POST
     @AuthFilter
     @Path("/logo")
     @Produces(MediaType.APPLICATION_JSON)
