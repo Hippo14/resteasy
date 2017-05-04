@@ -5,6 +5,7 @@ import config.ErrorConfig;
 import dao.EventsDAO;
 import dao.TokensDAO;
 import dao.UsersDAO;
+import dao.UsersEventsDAO;
 import model.Events;
 import model.Marker;
 import model.Users;
@@ -29,7 +30,6 @@ import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -52,6 +52,8 @@ public class EventsResourceImpl implements EventsResource, Serializable {
     UsersDAO usersDAO;
     @EJB
     LogoUtils logoUtils;
+    @EJB
+    UsersEventsDAO usersEventsDAO;
 
     final static Logger LOG = Logger.getLogger(EventsResourceImpl.class);
 
@@ -226,7 +228,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
 
             Users user = usersDAO.getByName(username);
 
-            List<Events> eventsList = eventsDAO.getByUsername(user);
+            List<Events> eventsList = usersEventsDAO.getByUser(user);
 
             int i = 0;
             for (Events event : eventsList) {
