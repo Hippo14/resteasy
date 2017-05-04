@@ -63,7 +63,7 @@ public interface EventsResource {
     List<UsersEvents> getUserListEvent(@Context HttpRequest request);
 
     @POST
-    @Path("/user")
+    @Path("/user/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     String addUserToEvent(@Context HttpRequest request);

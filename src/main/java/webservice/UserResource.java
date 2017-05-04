@@ -24,7 +24,7 @@ public interface UserResource {
     Response getByEmailAndPassword(EmailPassCred credentials);
 
     @POST
-    @Path("/")
+    @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewUser(Users newUser);
