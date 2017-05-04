@@ -1,6 +1,5 @@
 package webservice.impl;
 
-import auth.parts.Payload;
 import config.ErrorConfig;
 import dao.EventsDAO;
 import dao.TokensDAO;
@@ -10,21 +9,19 @@ import model.Events;
 import model.Marker;
 import model.Users;
 import model.UsersEvents;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jboss.resteasy.spi.HttpRequest;
+import utils.JWTUtils;
 import utils.LogoUtils;
 import utils.ObjectToJsonUtils;
 import webservice.AuthFilter;
 import webservice.EventsResource;
-import webservice.credentials.Token;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
@@ -58,28 +55,6 @@ public class EventsResourceImpl implements EventsResource, Serializable {
     final static Logger LOG = Logger.getLogger(EventsResourceImpl.class);
 
     @Override
-    public Response getAll(Token token) {
-        List<Events> events = eventsDAO.getAll();
-        if (events == null)
-            return Response.serverError().build();
-
-        GenericEntity<List<Events>> ge = new GenericEntity<List<Events>>(events){};
-        return Response.ok(ge).build();
-    }
-
-    @Override
-    @Path("{id}")
-    public Response getById(@PathParam("id") Integer id) {
-        return Response.ok(eventsDAO.getById(id)).build();
-    }
-
-    @Override
-    @Path("{name}")
-    public Response getByName(@PathParam("name") String name) {
-        return Response.ok(eventsDAO.getByName(name)).build();
-    }
-
-    @Override
     public Response registerNewEvent(@Context HttpRequest request) {
         HashMap<String, Object> hashMap = (HashMap<String, Object>) request.getAttribute("request");
         HashMap<String, Object> body = (HashMap<String, Object>) hashMap.get("body");
@@ -88,17 +63,14 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         String token = (String) hashMap.get("token");
 
         try {
-            Payload payload = new Payload(new String(Base64.decodeBase64(token.split("\\.")[1].getBytes("UTF-8"))));
-
             // Get actual user
-            Users user = usersDAO.getByName(payload.getName());
-
+            Users user = usersDAO.getByName(JWTUtils.getUsername(token));
             body.put("users", mapper.convertValue(user, HashMap.class));
         } catch (UnsupportedEncodingException e) {
             LOG.error(e);
         }
 
-        Events event = null;
+        Events event;
         try {
             event = mapper.convertValue(body, Events.class);
         } catch (Exception e) {
@@ -192,7 +164,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         double latitude = Double.parseDouble(body.get("latitude"));
         double longitude = Double.parseDouble(body.get("longitude"));
 
-        List<Events> boardList = eventsDAO.getTopEvents(latitude, longitude, 10);
+        List<Events> boardList = eventsDAO.getTopEvents(new Timestamp(new Date().getTime()), latitude, longitude, 10);
 
         Map<String, Map<String, String>> response = new HashMap<>();
         int i = 0;
@@ -221,12 +193,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         Map<String, Map<String, String>> response = new HashMap<>();
 
         try {
-            String[] subString = token.split("\\.");
-
-            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            String username = payload.getName();
-
-            Users user = usersDAO.getByName(username);
+            Users user = usersDAO.getByName(JWTUtils.getUsername(token));
 
             List<Events> eventsList = usersEventsDAO.getByUser(user);
 
@@ -239,7 +206,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
                 map.put("longitude", Double.toString(event.getLongitude()));
                 response.put(Integer.toString(i++), map);
             }
-            LOG.info("[GET EVENTS BY USER - username" + username + " response" + response);
+            LOG.info("[GET EVENTS BY USER - username" + JWTUtils.getUsername(token) + " response" + response);
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET EVENTS BY USER - error  response - " + response + " e - " + e.getMessage());
 
@@ -282,12 +249,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         Users user = null;
 
         try {
-            String[] subString = token.split("\\.");
-
-            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            String username = payload.getName();
-
-            user = usersDAO.getByName(username);
+            user = usersDAO.getByName(JWTUtils.getUsername(token));
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
 
@@ -302,6 +264,74 @@ public class EventsResourceImpl implements EventsResource, Serializable {
 
 
         return "User added!";
+    }
+
+    @Override
+    public Map<String, String> getLikedEvents(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        String token = (String) requestMap.get("token");
+
+        Map<String, String> result = new HashMap<>();
+
+        try {
+            result.put("likedEvents", Long.toString(usersEventsDAO.getLikedEvents(JWTUtils.getUsername(token))));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @Override
+    public String deleteUserFromEvent(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
+        Map<String, String> response = new HashMap<>();
+
+        String token = (String) requestMap.get("token");
+
+        Double latitude = Double.parseDouble(body.get("latitude"));
+        Double longitude = Double.parseDouble(body.get("longitude"));
+        Users user = null;
+
+        try {
+            user = usersDAO.getByName(JWTUtils.getUsername(token));
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+        user = eventsDAO.removeUserFromEvent(user, latitude, longitude);
+
+        if (user == null) {
+            throw new WebApplicationException(ErrorConfig.UNEXCEPTED_ERROR);
+        }
+
+        return "Deleted!";
+    }
+
+    @Override
+    public Boolean getUserStatusEvent(@Context HttpRequest request) {
+        HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
+        HashMap<String, String> body = (HashMap<String, String>) requestMap.get(("body"));
+        Map<String, String> response = new HashMap<>();
+
+        String token = (String) requestMap.get("token");
+
+        Double latitude = Double.parseDouble(body.get("latitude"));
+        Double longitude = Double.parseDouble(body.get("longitude"));
+        Users user = null;
+
+        try {
+            user = usersDAO.getByName(JWTUtils.getUsername(token));
+        } catch (UnsupportedEncodingException e) {
+            LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
+
+            e.printStackTrace();
+        }
+
+        return eventsDAO.getUserStatusEvent(user, latitude, longitude);
     }
 
 }

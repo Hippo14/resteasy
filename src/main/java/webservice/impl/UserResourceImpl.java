@@ -10,6 +10,7 @@ import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.HttpRequest;
 import secure.RSA;
+import utils.JWTUtils;
 import utils.LogoUtils;
 import utils.MD5Utils;
 import utils.ObjectToJsonUtils;
@@ -51,11 +52,6 @@ public class UserResourceImpl implements UserResource, Serializable {
 
     @EJB
     LogoUtils logoUtils;
-
-    @Override
-    public Response getByName(String name) {
-        return Response.ok(usersDAO.getByName(name)).build();
-    }
 
     @Override
     public Response getByEmailAndPassword(EmailPassCred credentials) {
@@ -113,13 +109,7 @@ public class UserResourceImpl implements UserResource, Serializable {
         LOG.info("[GET USER BY TOKEN - " + " | requestMap - " + requestMap + "]");
 
         try {
-            String[] subString = token.split("\\.");
-
-            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            String username = payload.getName();
-
-            user =  usersDAO.getByName(username);
-
+            user =  usersDAO.getByName(JWTUtils.getUsername(token));
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER BY TOKEN - error  response - " + " e - " + e.getMessage());
 
@@ -132,7 +122,6 @@ public class UserResourceImpl implements UserResource, Serializable {
     @Override
     public Map<String, String> getUserLogo(@Context HttpRequest request) {
         HashMap<String, Object> requestMap = (HashMap<String, Object>) request.getAttribute("request");
-        HashMap<String, String> body = (HashMap<String, String>) requestMap.get("body");
 
         String token = (String) requestMap.get("token");
         Map<String, String> response = new HashMap<>();
@@ -140,13 +129,7 @@ public class UserResourceImpl implements UserResource, Serializable {
         LOG.info("[GET USER LOGO - " + " | requestMap - " + requestMap + "]");
 
         try {
-            String[] subString = token.split("\\.");
-
-            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            String username = payload.getName();
-
-            byte[] imageB64 = Base64.encodeBase64(usersDAO.getByName(username).getUsersLogo().getImage());
-
+            byte[] imageB64 = Base64.encodeBase64(usersDAO.getByName(JWTUtils.getUsername(token)).getUsersLogo().getImage());
             response.put("image", new String(imageB64));
         } catch (UnsupportedEncodingException e) {
             LOG.info("[GET USER LOGO - error  e - " + e.getMessage());
@@ -165,12 +148,7 @@ public class UserResourceImpl implements UserResource, Serializable {
         String image = body.get("image");
 
         try {
-            String[] subString = token.split("\\.");
-
-            Payload payload = new Payload(new String(Base64.decodeBase64(subString[1].getBytes("UTF-8"))));
-            String username = payload.getName();
-
-            logoDAO.setLogoForNewUser(username, image);
+            logoDAO.setLogoForNewUser(JWTUtils.getUsername(token), image);
         } catch (UnsupportedEncodingException e) {
             LOG.info("[SET USER LOGO - error  e - " + e.getMessage());
 
