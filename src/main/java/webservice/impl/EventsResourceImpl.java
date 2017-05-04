@@ -168,7 +168,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
         double latitude = Double.parseDouble(body.get("latitude"));
         double longitude = Double.parseDouble(body.get("longitude"));
 
-        List<Events> boardList = eventsDAO.getTopEvents(latitude, longitude, 10);
+        List<Events> boardList = eventsDAO.getTopEvents(new Timestamp(new Date().getTime()), latitude, longitude, 10);
 
         Map<String, Map<String, String>> response = new HashMap<>();
         int i = 0;

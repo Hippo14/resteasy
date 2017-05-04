@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,18 +145,22 @@ public class EventsDAO implements Serializable {
         return events;
     }
 
-    public List<Events> getTopEvents(double latitude, double longitude, int top) {
+    public List<Events> getTopEvents(Timestamp actualDate, double latitude, double longitude, int top) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Events> q = cb.createQuery(Events.class);
         Root<Events> from = q.from(Events.class);
 
         Path<Double> latitudeDb = from.get("latitude");
         Path<Double> longitudeDb = from.get("longitude");
+        Path<Timestamp> dateEndingDb = from.get("date_ending");
         Predicate predicate = cb.and(
                 cb.gt(latitudeDb, latitude - 0.5),
                 cb.lt(latitudeDb, latitude + 0.5),
                 cb.gt(longitudeDb, longitude - 0.5),
-                cb.lt(longitudeDb, longitude + 0.5)
+                cb.lt(longitudeDb, longitude + 0.5),
+                cb.greaterThanOrEqualTo(dateEndingDb, actualDate),
+                cb.equal(from.get(Events_.deleted), 0),
+                cb.equal(from.get(Events_.active), 1)
         );
 
         q.select(from).where(predicate);
