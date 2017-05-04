@@ -47,7 +47,9 @@ public class EventJobDAO {
         CriteriaQuery<Events> q = cb.createQuery(Events.class);
         Root<Events> from = q.from(Events.class);
         Predicate predicate = cb.and(
-                cb.lessThan(from.get(Events_.date_ending), date)
+                cb.lessThan(from.get(Events_.date_ending), date),
+                cb.equal(from.get(Events_.active), 1),
+                cb.equal(from.get(Events_.deleted), 0)
         );
 
         q.select(from).where(predicate);
