@@ -79,7 +79,8 @@ public class EventsDAO implements Serializable {
                 cb.gt(longitudeDb, longitude - 0.5),
                 cb.lt(longitudeDb, longitude + 0.5),
                 cb.greaterThanOrEqualTo(dateEndingDb, actualDate),
-                cb.equal(from.get(Events_.deleted), 0)
+                cb.equal(from.get(Events_.deleted), 0),
+                cb.equal(from.get(Events_.active), 1)
         );
         q.select(from).where(predicate);
 
