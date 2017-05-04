@@ -21,7 +21,7 @@ import java.util.Map;
 public interface EventsResource {
 
     @POST
-    @Path("/")
+    @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Response registerNewEvent(@Context HttpRequest request);
