@@ -38,14 +38,14 @@ public interface UserResource {
 
     @POST
     @AuthFilter
-    @Path("/logo")
+    @Path("/logo/get")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Map<String, String> getUserLogo(@Context HttpRequest request);
 
     @POST
     @AuthFilter
-    @Path("/logo")
+    @Path("/logo/set")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Boolean setUserLogo(@Context HttpRequest request);
