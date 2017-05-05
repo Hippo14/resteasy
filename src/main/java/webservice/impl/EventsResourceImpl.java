@@ -175,6 +175,8 @@ public class EventsResourceImpl implements EventsResource, Serializable {
             map.put("description", event.getDescription());
             map.put("username", event.getUsers().getName());
             map.put("image", logoUtils.get(event.getUsers()));
+            map.put("latitude", Double.toString(event.getLatitude()));
+            map.put("longitude", Double.toString(event.getLongitude()));
 
             response.put(Integer.toString(i++), map);
         }
