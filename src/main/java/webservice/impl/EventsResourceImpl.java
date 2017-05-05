@@ -84,6 +84,7 @@ public class EventsResourceImpl implements EventsResource, Serializable {
             throw new WebApplicationException("Event exists!");
         }
         eventsDAO.add(event);
+        eventsDAO.addUserToEvent(event.getUsers(), event.getLatitude(), event.getLongitude());
 
         String jsonResponse = ObjectToJsonUtils.convertToJson("Event added");
         return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();

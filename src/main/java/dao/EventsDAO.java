@@ -128,8 +128,7 @@ public class EventsDAO implements Serializable {
         Root<Events> from = q.from(Events.class);
         Predicate predicate = cb.and(
                 cb.equal(from.get(Events_.latitude), latitude),
-                cb.equal(from.get(Events_.longitude), longitude),
-                cb.equal(from.get(Events_.active), 1)
+                cb.equal(from.get(Events_.longitude), longitude)
         );
 
         q.select(from).where(predicate);
@@ -268,4 +267,5 @@ public class EventsDAO implements Serializable {
 
         return (usersEvents != null);
     }
+
 }
