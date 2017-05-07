@@ -11,6 +11,7 @@ import model.Users;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.log4j.MDC;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.TypeFactory;
 import utils.ObjectToJsonUtils;
@@ -58,7 +59,12 @@ public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilt
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String result = new BufferedReader(new InputStreamReader(requestContext.getEntityStream(), "UTF-8"))
                 .lines().collect(Collectors.joining("\n"));
-        LOG.info("[CONNECTION EVENT: REQUEST - " + result + "]");
+        LOG.info("[CONNECTION EVENT: REQUEST  - " + result + "\n");
+        LOG.info("ENTERING IN RESOURCE - " + requestContext.getUriInfo().getPath() + " ]");
+
+        // Execution time
+        MDC.put("start-time", String.valueOf(System.currentTimeMillis()));
+
 
         // Request to hashmap
 //        Map<String, String> request = new ObjectMapper().readValue(result, TypeFactory.mapType(HashMap.class, String.class, String.class));
@@ -117,7 +123,8 @@ public class AuthFilter implements ContainerRequestFilter, ContainerResponseFilt
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        LOG.info("[CONNECTION EVENT: RESPONSE - requestContext - " + requestContext + " responseContext - " + responseContext +" ]");
+        LOG.info("[CONNECTION EVENT: RESPONSE - TOTAL EXECUTION TIME : " + (System.currentTimeMillis() - Long.parseLong((String) MDC.get("start-time")))  + " ms ]");
+        MDC.clear();
     }
 //
 //    @Override
