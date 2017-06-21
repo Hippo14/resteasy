@@ -36,8 +36,6 @@ public class Users implements Serializable {
     Timestamp dateUpdated;
     @Column(name = "date_deleted")
     Timestamp dateDeleted;
-    @Column(name = "userImage")
-    String userImage;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "logoID")
     UsersLogo usersLogo;
@@ -107,14 +105,6 @@ public class Users implements Serializable {
 
     public void setDateDeleted(Timestamp dateDeleted) {
         this.dateDeleted = dateDeleted;
-    }
-
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
     }
 
     public Profiles getProfiles() {
